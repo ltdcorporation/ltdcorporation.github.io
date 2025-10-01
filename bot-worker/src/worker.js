@@ -2,6 +2,36 @@
 
 const COPY_STRING_FIELDS = {ageTitle: true, ageText: true, ageButton: true, ctaLabel: true, ctaHint: true, planBTitle: true, planBHint: true, joinTitle: true, botsTitle: true, botsHint: true, updatesTitle: true, legalTitle: true, footer: true};
 const COPY_LIST_FIELDS = {taglines: true, joinSteps: true, legalItems: true};
+const DEFAULT_COPY = {
+  ageTitle: 'Halaman 18+',
+  ageText: 'Dengan lanjut, lo nyatakan umur 18+ dan setuju sama aturan halaman ini.',
+  ageButton: 'Gue 18+ (Lanjut)',
+  taglines: [
+    'Pusat Info Resmi (18+)',
+    'Kalo channel lagi pindah/kena report, link terbaru SELALU ada di sini.'
+  ],
+  ctaLabel: 'Masuk Channel (18+)',
+  ctaHint: 'Kalo tombol hijau ngeyel, pake cadangan di bawah ya.',
+  planBTitle: 'Plan B (kalo tombol hijau rewel)',
+  planBHint: 'Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram.',
+  joinTitle: 'Cara Join (3 langkah)',
+  joinSteps: [
+    'Install/buka Telegram dulu.',
+    'Klik tombol hijau "Masuk Channel" di atas.',
+    'Di Telegram, pencet "Join/Bergabung" — beres.'
+  ],
+  botsTitle: 'Bot Resmi',
+  botsHint: 'Cara pakai: Klik Mulai → pilih menu → ikutin instruksi. Gampang kok. Kalo satu lagi rewel, cobain bot lain.',
+  updatesTitle: 'Update Terbaru',
+  legalTitle: 'Legal / 18+',
+  legalItems: [
+    '18+ ONLY. Bukan untuk yang di bawah 18.',
+    'Konten legal dan konsensual. Ini cuma pusat info/link, tanpa konten eksplisit.',
+    'Kalo ada masalah/DMCA, hubungi kami via bot.'
+  ],
+  footer: 'Simpen halaman ini biar gampang dicari kalo channel pindah. Stay safe, hormati rules platform.'
+};
+
 
 function errMsg(err) {
   if (!err) return 'unknown error';
@@ -19,20 +49,19 @@ function formatCopy(copy) {
   const lines = [];
   lines.push('Copy (teks):');
   Object.keys(COPY_STRING_FIELDS).forEach((key) => {
-    lines.push(`- ${key}: ${c[key] ? c[key] : '(default)'}`);
+    const raw = c[key];
+    const val = (typeof raw === 'string' && raw.trim()) ? raw.trim() : DEFAULT_COPY[key];
+    lines.push(`- ${key}: ${val}`);
   });
   lines.push('');
   lines.push('Copy (list):');
   Object.keys(COPY_LIST_FIELDS).forEach((key) => {
-    const list = Array.isArray(c[key]) ? c[key] : [];
-    if (!list.length) {
-      lines.push(`- ${key}: (default)`);
-    } else {
-      lines.push(`- ${key}:`);
-      list.forEach((item, idx) => {
-        lines.push(`    ${idx + 1}. ${item}`);
-      });
-    }
+    const raw = c[key];
+    const list = Array.isArray(raw) && raw.length ? raw : DEFAULT_COPY[key];
+    lines.push(`- ${key}:`);
+    list.forEach((item, idx) => {
+      lines.push(`    ${idx + 1}. ${item}`);
+    });
   });
   return lines.join('\n');
 }

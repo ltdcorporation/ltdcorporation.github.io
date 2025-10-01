@@ -1,27 +1,75 @@
-Landing page full teks, idiot-proof, tanpa gambar eksplisit. Cuma info channel, bot, dan update.
+# Lust to Death Landing Page & Admin Bot
 
-Cara Pakai Cepat
-- Edit `landing/updates.json`:
-  - `latestLink`: ganti ke link channel utama
-  - `mirrors`: isi 1–3 link cadangan (opsional)
-  - `bots`: daftar link bot resmi (bisa banyak)
-  - `status`: teks status default
-  - `updates`: daftar pengumuman terbaru
-- (Opsional) Tambah `landing/logo.svg` atau `landing/logo.png`. Kalau ga ada, logo otomatis disembunyikan.
-- Buka `landing/index.html` di browser lokal buat cek.
+Landing page ini statis full teks (nggak ada konten eksplisit) + Cloudflare Worker buat update konten via bot Telegram. Bundle ini disimpan di repo `ltdcorporation.github.io` dan langsung live di GitHub Pages.
 
-Deploy ke GitHub Pages (User Site)
-1) Buat repo bernama `ltd.github.io` di GitHub (punya akun `ltdcorporation`).
-2) Copy isi folder `landing/` (index.html, updates.json, 404.html, .nojekyll) ke root repo.
-3) (Opsional) Taruh logo sebagai `logo.svg` atau `logo.png` atau `logo.jpg` di root repo.
-4) Commit dan push ke `main`. User Site aktif otomatis di `https://ltd.github.io/`.
-5) Tunggu ±1–2 menit, lalu test URL-nya.
+## Struktur Folder
+- `index.html`, `404.html`, `.nojekyll`, `updates.json`, `logo.jpg` (opsional) — aset GitHub Pages
+- `bot-worker/` — Cloudflare Worker + dokumentasi bot admin
 
-Custom Domain (opsional)
-- Tambah file `CNAME` berisi domain kamu (contoh: `status.domain.com`).
-- Atur DNS ke GitHub Pages sesuai panduan.
+## Update Konten via Bot
+Bot admin `@ltdwebadminbot` udah siap pakai. Semua perubahan landing page cukup lewat command di Telegram (nggak perlu edit file manual).
 
-Catatan
-- Halaman ini hanya pusat info/link. Tidak menyimpan konten eksplisit.
-- Edit teks di `index.html` kalau mau lebih personal.
-- Semua copy sudah dibuat santuy dan jelas.
+### Flow Cepat
+1. Ketik `/menu` buat liat shortcut tombol.
+2. Pakai command sesuai kebutuhan:
+   - Link: `/main`, `/addmirror`, `/delmirror`, `/status`
+   - Bot resmi: `/addbot`, `/delbot`
+   - Pengumuman: `/update`, `/updates`, `/editupdate`, `/delupdate`
+   - Copy landing page: `/showcopy`, `/setcopy <key> <teks>`, `/setcopylist <key> item1 | item2 | item3`
+3. Semua perubahan commit otomatis ke `updates.json` di branch `main` repo `ltdcorporation.github.io`.
+
+### Default Copy (ketik `default` buat reset)
+| Key | Default |
+| --- | --- |
+| `ageTitle` | Halaman 18+ |
+| `ageText` | Dengan lanjut, lo nyatakan umur 18+ dan setuju sama aturan halaman ini. |
+| `ageButton` | Gue 18+ (Lanjut) |
+| `taglines` | 1. Pusat Info Resmi (18+) <br> 2. Kalo channel lagi pindah/kena report, link terbaru SELALU ada di sini. |
+| `ctaLabel` | Masuk Channel (18+) |
+| `ctaHint` | Kalo tombol hijau ngeyel, pake cadangan di bawah ya. |
+| `planBTitle` | Plan B (kalo tombol hijau rewel) |
+| `planBHint` | Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram. |
+| `joinTitle` | Cara Join (3 langkah) |
+| `joinSteps` | 1. Install/buka Telegram dulu. <br> 2. Klik tombol hijau "Masuk Channel" di atas. <br> 3. Di Telegram, pencet "Join/Bergabung" — beres. |
+| `botsTitle` | Bot Resmi |
+| `botsHint` | Cara pakai: Klik Mulai → pilih menu → ikutin instruksi. Gampang kok. Kalo satu lagi rewel, cobain bot lain. |
+| `updatesTitle` | Update Terbaru |
+| `legalTitle` | Legal / 18+ |
+| `legalItems` | 1. 18+ ONLY. Bukan untuk yang di bawah 18. <br> 2. Konten legal dan konsensual. Ini cuma pusat info/link, tanpa konten eksplisit. <br> 3. Kalo ada masalah/DMCA, hubungi kami via bot. |
+| `footer` | Simpen halaman ini biar gampang dicari kalo channel pindah. Stay safe, hormati rules platform. |
+
+`/setcopy` menerima string. `/setcopylist` pisahkan item pakai `|`. Ketik `default` (atau `-`) buat balikin ke teks bawaan.
+
+### Setup Worker (sekali jalan)
+1. `cd bot-worker`
+2. Login Cloudflare: `wrangler login`
+3. Deploy pertama: `wrangler deploy`
+4. Set secrets:
+   ```
+   wrangler secret put BOT_TOKEN
+   wrangler secret put GITHUB_TOKEN
+   wrangler secret put ADMIN_IDS
+   wrangler secret put REPO_OWNER  # ltdcorporation
+   wrangler secret put REPO_NAME   # ltdcorporation.github.io
+   wrangler secret put FILE_PATH   # updates.json
+   wrangler secret put BRANCH      # main
+   ```
+5. Set webhook Telegram: `https://api.telegram.org/bot<BOT_TOKEN>/setWebhook?url=https://ltd-admin-bot.rozikinkhoirr.workers.dev/telegram`
+
+### Redeploy Worker
+```
+cd bot-worker
+wrangler deploy
+```
+(Update kode Worker → deploy ulang. Ubah `updates.json` doang cukup commit/push.)
+
+## Deploy GitHub Pages Manual (opsional)
+1. Pastikan repo `ltdcorporation/ltdcorporation.github.io` sinkron dengan folder ini.
+2. Commit & push ke branch `main`.
+3. GitHub Pages otomatis build → cek `https://ltdcorporation.github.io/` (atau domain custom kalau ada file `CNAME`).
+
+## Tips Tambahan
+- Logo pakai `logo.svg` / `logo.png` / `logo.jpg`. Kalau file nggak ada, script otomatis nyembunyiin `<img id="logo">`.
+- Semua teks bisa di-hide: set ke kosong pakai `/setcopy <key> -` atau kosongin list.
+- Backup: tar `updates.json` + tag git release sebelum migrasi.
+- Rollback gampang: `git checkout v1.0.0` (tag pertama repo landing page).
