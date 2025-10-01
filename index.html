@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Lust to Death — Pusat info resmi (18+). Link channel & bot terbaru ada di sini. Kalo pindah/kena report, update selalu di sini." />
+    <meta name="robots" content="index,follow" />
+    <title>Lust to Death — Pusat Info Resmi (18+)</title>
+    <style>
+      :root { --bg:#0b0b0c; --panel:#151518; --text:#e7e7ea; --sub:#a9a9b0; --accent:#E85578; --warn:#f59e0b; --muted:#1d1d22; --link:#60a5fa; }
+      html,body{height:100%}
+      body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;line-height:1.5}
+      .wrap{max-width:720px;margin:0 auto;padding:24px}
+      header{display:flex;flex-direction:column;align-items:center;gap:12px;margin:12px 0 18px}
+      #logo{display:none;width:64px;height:64px}
+      h1{font-size:24px;margin:0;font-weight:800}
+      p.sub{color:var(--sub);margin:0;text-align:center}
+      .status{font-size:14px;color:var(--sub);margin-top:4px}
+      .panel{background:var(--panel);border-radius:12px;padding:18px;margin:14px 0}
+      .cta{display:block;text-align:center;background:var(--accent);color:#fff;text-decoration:none;font-weight:800;padding:14px;border-radius:10px}
+      .cta:hover{filter:brightness(1.05)}
+      .muted{background:var(--muted);border-radius:10px;padding:12px}
+      .grid{display:grid;grid-template-columns:1fr;gap:8px}
+      .row{display:flex;gap:8px}
+      .btn{display:inline-block;text-align:center;text-decoration:none;background:var(--muted);color:var(--text);padding:10px;border-radius:8px;border:1px solid #2a2a31}
+      .btn:hover{filter:brightness(1.05)}
+      h2{font-size:16px;margin:12px 0 8px}
+      ol,ul{margin:8px 0 0;padding-left:18px}
+      li{margin:4px 0}
+      .small{font-size:12px;color:var(--sub)}
+      footer{margin:24px 0 8px;text-align:center}
+      .age{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;padding:16px}
+      .age .box{background:var(--panel);padding:18px;border-radius:12px;max-width:360px}
+      .hide{display:none}
+      @media(min-width:560px){ .grid{grid-template-columns:repeat(3,1fr)} }
+    </style>
+  </head>
+  <body>
+    <div id="age" class="age">
+      <div class="box">
+        <h2 id="ageTitle" style="margin:0 0 8px;font-size:18px">Halaman 18+</h2>
+        <p id="ageText" class="small" style="margin:0 0 12px">Dengan lanjut, lo nyatakan umur 18+ dan setuju sama aturan halaman ini.</p>
+        <a href="#" id="ageYes" class="cta" style="display:block">Gue 18+ (Lanjut)</a>
+      </div>
+    </div>
+
+    <main class="wrap">
+      <header>
+        <img id="logo" src="logo.svg" alt="Lust to Death logo" />
+        <h1 id="brand">Lust to Death</h1>
+        <p id="tagline1" class="sub">Pusat Info Resmi (18+)</p>
+        <p id="tagline2" class="sub">Kalo channel lagi pindah/kena report, link terbaru SELALU ada di sini.</p>
+        <div id="status" class="status"></div>
+      </header>
+
+      <section class="panel">
+        <a id="btnJoin" class="cta" href="#">Masuk Channel (18+)</a>
+        <div id="ctaHint" class="small" style="margin-top:8px">Kalo tombol hijau ngeyel, pake cadangan di bawah ya.</div>
+      </section>
+
+      <section class="panel">
+        <h2 id="planBTitle">Plan B (kalo tombol hijau rewel)</h2>
+        <div class="grid">
+          <a id="m1" class="btn" href="#">Cadangan 1</a>
+          <a id="m2" class="btn" href="#">Cadangan 2</a>
+          <a id="m3" class="btn" href="#">Cadangan 3</a>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <a id="copy" class="btn" href="#">Salin Link</a>
+          <span id="toast" class="small" aria-live="polite"></span>
+        </div>
+        <div id="planBHint" class="muted small" style="margin-top:8px">Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram.</div>
+      </section>
+
+      <section class="panel">
+        <h2 id="joinTitle">Cara Join (3 langkah)</h2>
+        <ol id="joinSteps"></ol>
+      </section>
+
+      <section class="panel">
+        <h2 id="botsTitle">Bot Resmi</h2>
+        <div id="bots" class="row" style="flex-wrap: wrap"></div>
+        <div id="botsHint" class="small" style="margin-top:8px">Cara pakai: Klik Mulai → pilih menu → ikutin instruksi. Gampang kok. Kalo satu lagi rewel, cobain bot lain.</div>
+      </section>
+
+      <section class="panel">
+        <h2 id="updatesTitle">Update Terbaru</h2>
+        <ul id="updates"></ul>
+      </section>
+
+      <section class="panel">
+        <h2 id="legalTitle">Legal / 18+</h2>
+        <ul id="legalItems" class="small"></ul>
+      </section>
+
+      <footer id="footerText" class="small">
+        Simpen halaman ini biar gampang dicari kalo channel pindah. Stay safe, hormati rules platform.
+      </footer>
+    </main>
+
+    <script>
+      // Age gate
+      (function(){
+        var ok = localStorage.getItem('age-ok');
+        var age = document.getElementById('age');
+        if (ok === '1') age.classList.add('hide');
+        document.getElementById('ageYes').onclick = function(e){ e.preventDefault(); localStorage.setItem('age-ok','1'); age.classList.add('hide'); };
+      })();
+
+      // Logo: show only if file exists (svg -> png -> jpg)
+      (function(){
+        var logo = document.getElementById('logo');
+        function show(){ logo.style.display='block'; }
+        function tryNext(list, idx){
+          if (idx >= list.length) return; 
+          fetch(list[idx], {method:'HEAD'}).then(function(r){
+            if (r.ok) { logo.src = list[idx]; show(); }
+            else { tryNext(list, idx+1); }
+          }).catch(function(){ tryNext(list, idx+1); });
+        }
+        tryNext(['logo.svg','logo.png','logo.jpg'], 0);
+      })();
+
+      // Load updates.json and wire UI
+      (async function(){
+        try{
+          var res = await fetch('updates.json', {cache:'no-store'});
+          var data = await res.json();
+
+          var latest = data.latestLink || '#';
+          var mirrors = data.mirrors || [];
+          var status = data.status || 'Status Channel: AKTIF';
+          var bot = data.bot || null;
+          var brand = data.brand || 'Lust to Death';
+
+          // Brand in title and header
+          document.getElementById('brand').textContent = brand;
+
+          var fallbackCopy = {
+            ageTitle: 'Halaman 18+',
+            ageText: 'Dengan lanjut, lo nyatakan umur 18+ dan setuju sama aturan halaman ini.',
+            ageButton: 'Gue 18+ (Lanjut)',
+            taglines: [
+              'Pusat Info Resmi (18+)',
+              'Kalo channel lagi pindah/kena report, link terbaru SELALU ada di sini.'
+            ],
+            ctaLabel: 'Masuk Channel (18+)',
+            ctaHint: 'Kalo tombol hijau ngeyel, pake cadangan di bawah ya.',
+            planBTitle: 'Plan B (kalo tombol hijau rewel)',
+            planBHint: 'Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram.',
+            joinTitle: 'Cara Join (3 langkah)',
+            joinSteps: [
+              'Install/buka Telegram dulu.',
+              'Klik tombol hijau "Masuk Channel" di atas.',
+              'Di Telegram, pencet "Join/Bergabung" — beres.'
+            ],
+            botsTitle: 'Bot Resmi',
+            botsHint: 'Cara pakai: Klik Mulai → pilih menu → ikutin instruksi. Gampang kok. Kalo satu lagi rewel, cobain bot lain.',
+            updatesTitle: 'Update Terbaru',
+            legalTitle: 'Legal / 18+',
+            legalItems: [
+              '18+ ONLY. Bukan untuk yang di bawah 18.',
+              'Konten legal dan konsensual. Ini cuma pusat info/link, tanpa konten eksplisit.',
+              'Kalo ada masalah/DMCA, hubungi kami via bot.'
+            ],
+            footer: 'Simpen halaman ini biar gampang dicari kalo channel pindah. Stay safe, hormati rules platform.'
+          };
+          var copy = data.copy || {};
+          var setText = function(id, value) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            if (value === null || value === undefined) {
+              el.textContent = '';
+              el.style.display = 'none';
+              return;
+            }
+            var str = typeof value === 'string' ? value.trim() : String(value);
+            if (str) {
+              el.textContent = str;
+              el.style.display = '';
+            } else {
+              el.textContent = '';
+              el.style.display = 'none';
+            }
+          };
+          var pick = function(key, fallbackKey) {
+            var val = copy[key];
+            if (val === undefined || val === null) return fallbackCopy[fallbackKey || key];
+            if (typeof val === 'string' && val.trim() === '') return fallbackCopy[fallbackKey || key];
+            return val;
+          };
+          var taglines = Array.isArray(copy.taglines) && copy.taglines.length ? copy.taglines : fallbackCopy.taglines;
+          setText('tagline1', taglines[0] || '');
+          setText('tagline2', taglines[1] || '');
+
+          document.title = brand + ' — ' + (taglines[0] || 'Pusat Info Resmi (18+)');
+
+          setText('ageTitle', pick('ageTitle'));
+          setText('ageText', pick('ageText'));
+          setText('ctaHint', pick('ctaHint'));
+          setText('planBTitle', pick('planBTitle'));
+          setText('planBHint', pick('planBHint'));
+          setText('joinTitle', pick('joinTitle'));
+          setText('botsTitle', pick('botsTitle'));
+          setText('botsHint', pick('botsHint'));
+          setText('updatesTitle', pick('updatesTitle'));
+          setText('legalTitle', pick('legalTitle'));
+          setText('footerText', pick('footer'));
+          var ageBtn = document.getElementById('ageYes');
+          if (ageBtn) {
+            ageBtn.textContent = pick('ageButton');
+          }
+
+          document.getElementById('status').textContent = status;
+          var btn = document.getElementById('btnJoin');
+          btn.href = latest;
+          btn.textContent = pick('ctaLabel');
+
+          var steps = Array.isArray(copy.joinSteps) && copy.joinSteps.length ? copy.joinSteps : fallbackCopy.joinSteps;
+          var stepsEl = document.getElementById('joinSteps');
+          if (stepsEl) {
+            stepsEl.innerHTML = '';
+            steps.forEach(function(step){
+              var li = document.createElement('li');
+              li.textContent = step;
+              stepsEl.appendChild(li);
+            });
+          }
+
+          var legal = Array.isArray(copy.legalItems) && copy.legalItems.length ? copy.legalItems : fallbackCopy.legalItems;
+          var legalEl = document.getElementById('legalItems');
+          if (legalEl) {
+            legalEl.innerHTML = '';
+            legal.forEach(function(item){
+              var li = document.createElement('li');
+              li.textContent = item;
+              legalEl.appendChild(li);
+            });
+          }
+
+          // Mirrors
+          var m1 = document.getElementById('m1');
+          var m2 = document.getElementById('m2');
+          var m3 = document.getElementById('m3');
+          var setOrHide = function(el, url){ if(url){ el.href=url; el.style.display='inline-block'; } else { el.style.display='none'; } };
+          setOrHide(m1, mirrors[0]);
+          setOrHide(m2, mirrors[1]);
+          setOrHide(m3, mirrors[2]);
+
+          // Copy link
+          var toast = document.getElementById('toast');
+          document.getElementById('copy').onclick = async function(e){
+            e.preventDefault();
+            try{
+              await navigator.clipboard.writeText(latest);
+              toast.textContent = 'Link disalin! Tinggal tempel di Telegram.';
+            }catch(err){
+              toast.textContent = 'Gagal nyalin. Klik kanan → Copy Link.';
+            }
+            setTimeout(function(){ toast.textContent=''; }, 1800);
+          };
+
+          // Bots (multi)
+          var bots = Array.isArray(data.bots) ? data.bots : (bot ? [bot] : []);
+          var botsWrap = document.getElementById('bots');
+          if (botsWrap) {
+            if (bots.length === 0) {
+              botsWrap.parentElement.style.display = 'none';
+            } else {
+              bots.forEach(function(url, idx){
+                var a = document.createElement('a');
+                a.className = 'btn';
+                a.href = url;
+                a.rel = 'noopener';
+                // Label: pakai handle dari URL atau Bot 1/2/3
+                try {
+                  var u = new URL(url);
+                  var handle = u.pathname.replace(/\/+/, '').trim();
+                  a.textContent = handle ? '@' + handle : ('Bot ' + (idx+1));
+                } catch (e) {
+                  a.textContent = 'Bot ' + (idx+1);
+                }
+                botsWrap.appendChild(a);
+              });
+            }
+          }
+
+          // Updates list
+          var list = document.getElementById('updates');
+          (data.updates||[]).slice(0,8).forEach(function(u){
+            var li = document.createElement('li');
+            var when = u.ts ? new Date(u.ts).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }) : '';
+            li.textContent = (when?('['+when+'] '):'') + (u.text||'');
+            list.appendChild(li);
+          });
+        }catch(e){
+          document.getElementById('status').textContent = 'Lagi nyambungin data… kalo lama, refresh ya.';
+        }
+      })();
+    </script>
+  </body>
+</html>
