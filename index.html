@@ -651,30 +651,36 @@ ol li::before {
       (function(){
         var totalEl = document.getElementById('totalVisits');
         var uniqueEl = document.getElementById('uniqueVisits');
-        var namespace = 'asiafap.com';
+        var namespace = 'asiafap_com';
         function fmt(val){
           try { return Number(val || 0).toLocaleString('id-ID'); } catch (_) { return val; }
         }
+        function fetchCount(url, ok, fail){
+          fetch(url).then(function(r){ return r.json(); }).then(function(data){
+            if (!data || typeof data.value === 'undefined') throw new Error('no value');
+            ok(data.value);
+          }).catch(function(){ fail(); });
+        }
         if (totalEl) {
-          fetch('https://api.countapi.xyz/hit/' + namespace + '/site_visits').then(function(r){ return r.json(); }).then(function(data){
-            totalEl.textContent = 'Total kunjungan: ' + fmt(data.value);
-          }).catch(function(){ totalEl.textContent = 'Total kunjungan: n/a'; });
+          fetchCount('https://api.countapi.xyz/hit/' + namespace + '/site_visits', function(val){
+            totalEl.textContent = 'Total kunjungan: ' + fmt(val);
+          }, function(){ totalEl.textContent = 'Total kunjungan: error'; });
         }
         if (uniqueEl) {
           var key = 'asiafap_unique_seen';
           var endpoint = localStorage.getItem(key) ? 'get' : 'hit';
-          fetch('https://api.countapi.xyz/' + endpoint + '/' + namespace + '/unique_visitors').then(function(r){ return r.json(); }).then(function(data){
+          fetchCount('https://api.countapi.xyz/' + endpoint + '/' + namespace + '/unique_visitors', function(val){
             if (!localStorage.getItem(key)) localStorage.setItem(key, '1');
-            uniqueEl.textContent = 'Pengunjung unik: ' + fmt(data.value);
-          }).catch(function(){ uniqueEl.textContent = 'Pengunjung unik: error'; });
+            uniqueEl.textContent = 'Pengunjung unik: ' + fmt(val);
+          }, function(){ uniqueEl.textContent = 'Pengunjung unik: error'; });
         }
         var todayEl = document.getElementById('todayVisits');
         if (todayEl) {
           var now = new Date();
           var todayKey = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
-          fetch('https://api.countapi.xyz/hit/' + namespace + '/today_' + todayKey).then(function(r){ return r.json(); }).then(function(data){
-            todayEl.textContent = 'Hari ini: ' + fmt(data.value);
-          }).catch(function(){ todayEl.textContent = 'Hari ini: error'; });
+          fetchCount('https://api.countapi.xyz/hit/' + namespace + '/today_' + todayKey, function(val){
+            todayEl.textContent = 'Hari ini: ' + fmt(val);
+          }, function(){ todayEl.textContent = 'Hari ini: error'; });
         }
         var channelEl = document.getElementById('channelCount');
         if (channelEl) {
