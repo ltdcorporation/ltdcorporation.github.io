@@ -103,20 +103,20 @@ async function handleTelegram(request, env) {
     if (cq && cq.data) {
       // Simple menu callbacks: just show help for the command
       const map = {
-        'menu:setmain': 'Kirim: /main <url>\nContoh: /main https://t.me/ltddev',
-        'menu:addmirror': 'Opsional: /setcopylist channels <url1> | <url2> | ... untuk urutkan channel. /addmirror <url> tetap bisa.',
-        'menu:delmirror': 'Reset daftar channel: /setcopylist channels default. Atau /delmirror <index>.',
-        'menu:status': 'Kirim: /status <teks status> (muncul di header).',
-        'menu:update': 'Kirim: /update <teks pengumuman> (timestamp otomatis).',
-        'menu:addbot': 'Kirim: /addbot <url bot resmi>.',
-        'menu:delbot': 'Kirim: /delbot <index> (cek urutan via /show).',
-        'menu:listupdates': 'Kirim: /updates buat lihat daftar + index.',
-        'menu:delupdate': 'Kirim: /delupdate <index> untuk hapus update.',
-        'menu:editupdate': 'Kirim: /editupdate <index> <teks baru>.',
-        'menu:setcopy': 'Format: /setcopy <key> <teks>. Ketik default atau - buat reset.',
-        'menu:setcopylist': 'Format: /setcopylist <key> item1 | item2 | ... (pisahkan dengan |).',
-        'menu:show': 'Kirim: /show buat ringkasan config.',
-        'menu:showcopy': 'Kirim: /showcopy buat lihat teks yang aktif.',
+        'menu:setmain': 'Ketik: /main <url> (ganti link utama). Contoh: /main https://t.me/ltddev',
+        'menu:addmirror': 'Ngatur urutan channel: /setcopylist channels <url1> | <url2> | ...',
+        'menu:delmirror': 'Reset urutan channel: /setcopylist channels default',
+        'menu:status': 'Update status header: /status <teks>',
+        'menu:update': 'Tambah pengumuman: /update <teks>',
+        'menu:addbot': 'Masukin bot resmi: /addbot https://t.me/namabot',
+        'menu:delbot': 'Hapus bot: /delbot <index> (cek di /show)',
+        'menu:listupdates': 'Liat daftar update: /updates',
+        'menu:delupdate': 'Hapus update: /delupdate <index>',
+        'menu:editupdate': 'Edit update: /editupdate <index> <teks baru>',
+        'menu:setcopy': 'Ganti teks: /setcopy <key> <teks>. default/- buat reset.',
+        'menu:setcopylist': 'Ganti list: /setcopylist <key> item1 | item2 | ...',
+        'menu:show': 'Ringkasan config: /show',
+        'menu:showcopy': 'Liat semua copy: /showcopy',
         'menu:help': helpOverview()
       };
       const t = map[cq.data] || 'Pilih aksi lalu ikuti petunjuk.';
@@ -308,54 +308,50 @@ function isAdmin(userId, env) {
 
 function helpOverview() {
   return [
-    'Admin Cheat Sheet:',
+    'Cheatsheet Admin:',
     '',
     'Channel:',
-    '  /setcopylist channels <url1> | <url2> | ... — atur urutan tombol channel (opsional).',
-    '  /setcopylist channelNames <label1> | <label2> | ... — label tombol sesuai urutan channel.',
-    '  /setcopylist channels default — balik ke latestLink + mirrors.',
+    '- /setcopylist channels <url1> | <url2> | ... -> ngatur urutan tombol channel.',
+    '- /setcopylist channelNames <nama1> | <nama2> | ... -> ngasih label tombol.',
+    '- /setcopylist channels default -> reset ke link bawaan.',
     '',
     'Status & Update:',
-    '  /status <teks> — ubah status di header.',
-    '  /update <teks> — tambah pengumuman (timestamp WIB).',
-    '  /updates — lihat daftar + index.',
-    '  /editupdate <index> <teks> — revisi pengumuman.',
-    '  /delupdate <index> — hapus pengumuman.',
+    '- /status <teks> -> update status header.',
+    '- /update <teks> -> tambah pengumuman (timestamp otomatis).',
+    '- /updates -> liat daftar + index.',
+    '- /editupdate <index> <teks baru> -> edit pengumuman.',
+    '- /delupdate <index> -> hapus pengumuman.',
     '',
-    'Copy Landing Page:',
-    '  /showcopy — lihat teks/list yang aktif + default key.',
-    '  /setcopy <key> <teks> — ubah teks tunggal. Pakai default atau - buat reset.',
-    '  /setcopylist <key> item1 | item2 — ubah list (pisahkan dengan |).',
+    'Copy Halaman:',
+    '- /showcopy -> liat teks/list yang aktif + nama key.',
+    '- /setcopy <key> <teks> -> ganti teks, pake default atau - buat reset.',
+    '- /setcopylist <key> item1 | item2 -> ganti list, pisah pake |.',
     '',
     'Bot Resmi:',
-    '  /addbot <url> — tambah bot.',
-    '  /delbot <index> — hapus bot sesuai urutan.',
+    '- /addbot <url> -> masukin bot.',
+    '- /delbot <index> -> hapus bot sesuai urutan.',
     '',
     'Monitoring:',
-    '  /show — lihat ringkasan config (link utama, mirrors, update terakhir).',
-    '',
-    'Tips cepat:',
-    '  - Selalu ketik default atau - untuk balikin nilai ke bawaan.',
-    '  - Pakai /setcopylist channels ... untuk semua channel utama, gak perlu mirror.',
-    '  - Kalau butuh panduan ringkas, tekan tombol "Help / Panduan" di menu.',
+    '- /show -> ringkasan config.',
+    '- /help -> balik ke panduan ini kapan aja.'
   ].join('\n');
 }
 
 function helpText() {
-  return 'Perintah ga dikenal. Ketik /help buat panduan lengkap.';
+  return 'Command ga dikenalin. Ketik /help buat panduan.';
 }
 
 function menuKeyboard() {
   return {
     reply_markup: {
       inline_keyboard: [
-        [ { text: 'Set Main Link', callback_data: 'menu:setmain' }, { text: 'Urutkan Channel', callback_data: 'menu:addmirror' } ],
-        [ { text: 'Reset Channel', callback_data: 'menu:delmirror' }, { text: 'Status', callback_data: 'menu:status' } ],
+        [ { text: 'Ganti Link Utama', callback_data: 'menu:setmain' }, { text: 'Urutkan Channel', callback_data: 'menu:addmirror' } ],
+        [ { text: 'Reset Channel', callback_data: 'menu:delmirror' }, { text: 'Update Status', callback_data: 'menu:status' } ],
         [ { text: 'Tambah Bot', callback_data: 'menu:addbot' }, { text: 'Hapus Bot', callback_data: 'menu:delbot' } ],
-        [ { text: 'Tambah Update', callback_data: 'menu:update' }, { text: 'List Update', callback_data: 'menu:listupdates' } ],
+        [ { text: 'Tambah Update', callback_data: 'menu:update' }, { text: 'Daftar Update', callback_data: 'menu:listupdates' } ],
         [ { text: 'Hapus Update', callback_data: 'menu:delupdate' }, { text: 'Edit Update', callback_data: 'menu:editupdate' } ],
-        [ { text: 'Set Copy', callback_data: 'menu:setcopy' }, { text: 'Set Copy List', callback_data: 'menu:setcopylist' } ],
-        [ { text: 'Show Config', callback_data: 'menu:show' }, { text: 'Show Copy', callback_data: 'menu:showcopy' } ],
+        [ { text: 'Edit Teks', callback_data: 'menu:setcopy' }, { text: 'Edit List', callback_data: 'menu:setcopylist' } ],
+        [ { text: 'Lihat Config', callback_data: 'menu:show' }, { text: 'Lihat Copy', callback_data: 'menu:showcopy' } ],
         [ { text: 'Help / Panduan', callback_data: 'menu:help' } ]
       ]
     }
