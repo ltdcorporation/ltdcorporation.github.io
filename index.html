@@ -247,6 +247,26 @@ footer {
   text-align:center;
   color:var(--muted);
   font-size:0.9rem;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  align-items:center;
+}
+.footer-metrics {
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  justify-content:center;
+  color:var(--muted);
+}
+.footer-metrics span {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px 14px;
+  font-size:0.85rem;
+  box-shadow:0 6px 14px rgba(0,0,0,0.2);
+  color:#fff;
 }
 #age {
   position:fixed;
@@ -362,7 +382,11 @@ ol li::before {
       </section>
 
       <footer id="footerText" class="small">
-        Simpen halaman ini biar gampang dicari kalo channel pindah. Stay safe, hormati rules platform.
+        <div>Simpen halaman ini biar gampang dicari kalo channel pindah. Stay safe, hormati rules platform.</div>
+        <div class="footer-metrics">
+          <span id="totalVisits">Total kunjungan: ...</span>
+          <span id="uniqueVisits">Pengunjung unik: ...</span>
+        </div>
       </footer>
     </main>
 
@@ -618,6 +642,29 @@ ol li::before {
           document.getElementById('status').textContent = 'Lagi nyambungin data… kalo lama, refresh ya.';
         }
       })();
+      // Visitor metrics via countapi.xyz
+      (function(){
+        var totalEl = document.getElementById('totalVisits');
+        var uniqueEl = document.getElementById('uniqueVisits');
+        var namespace = 'asiafap.com';
+        function fmt(val){
+          try { return Number(val || 0).toLocaleString('id-ID'); } catch (_) { return val; }
+        }
+        if (totalEl) {
+          fetch('https://api.countapi.xyz/hit/' + namespace + '/site_visits').then(function(r){ return r.json(); }).then(function(data){
+            totalEl.textContent = 'Total kunjungan: ' + fmt(data.value);
+          }).catch(function(){ totalEl.textContent = 'Total kunjungan: n/a'; });
+        }
+        if (uniqueEl) {
+          var key = 'asiafap_unique_seen';
+          var endpoint = localStorage.getItem(key) ? 'get' : 'hit';
+          fetch('https://api.countapi.xyz/' + endpoint + '/' + namespace + '/unique_visitors').then(function(r){ return r.json(); }).then(function(data){
+            if (!localStorage.getItem(key)) localStorage.setItem(key, '1');
+            uniqueEl.textContent = 'Pengunjung unik: ' + fmt(data.value);
+          }).catch(function(){ uniqueEl.textContent = 'Pengunjung unik: n/a'; });
+        }
+      })();
+
     </script>
   </body>
 </html>
