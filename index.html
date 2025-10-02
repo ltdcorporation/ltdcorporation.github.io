@@ -381,8 +381,8 @@ ol li::before {
         <ul id="legalItems" class="small"></ul>
       </section>
 
-      <footer id="footerText" class="small">
-        <div>Simpen halaman ini biar gampang dicari kalo channel pindah. Stay safe, hormati rules platform.</div>
+      <footer class="small">
+        <div id="footerMessage">Simpen halaman ini biar gampang dicari kalo channel pindah. Stay safe, hormati rules platform.</div>
         <div class="footer-metrics">
           <span id="totalVisits">Total kunjungan: ...</span>
           <span id="uniqueVisits">Pengunjung unik: ...</span>
@@ -503,8 +503,7 @@ ol li::before {
           setText('botsHint', pick('botsHint'));
           setText('updatesTitle', pick('updatesTitle'));
           setText('legalTitle', pick('legalTitle'));
-          setText('footerText', pick('footer'));
-          var ageBtn = document.getElementById('ageYes');
+          setText('footerMessage', pick('footer'));          var ageBtn = document.getElementById('ageYes');
           if (ageBtn) {
             ageBtn.textContent = pick('ageButton');
           }
