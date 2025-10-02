@@ -578,8 +578,14 @@ ol li::before {
           var list = document.getElementById('updates');
           (data.updates||[]).slice(0,8).forEach(function(u){
             var li = document.createElement('li');
-            var when = u.ts ? new Date(u.ts).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }) : '';
-            li.textContent = (when?('['+when+'] '):'') + (u.text||'');
+            var whenText = '';
+            if (u.ts) {
+              var dt = new Date(u.ts);
+              if (!isNaN(dt)) {
+                whenText = dt.toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta', day: '2-digit', month: 'long', year: 'numeric' });
+              }
+            }
+            li.textContent = (whenText ? ('[' + whenText + '] ') : '') + (u.text || '');
             list.appendChild(li);
           });
         }catch(e){
