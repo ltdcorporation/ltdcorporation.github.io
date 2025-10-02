@@ -193,6 +193,7 @@ h2 {
   margin-top:12px;
   color:var(--muted);
 }
+#copyTools { display:none !important; }
 #updates {
   list-style:none;
   margin:0;
@@ -355,16 +356,6 @@ ol li::before {
         <div id="channelsHint" class="small" style="margin-top:8px">Semua link channel aktif. Pilih yang paling cocok buat kamu.</div>
       </section>
 
-      <!--
-      <section class="panel" id="copyTools" style="display:none">
-        <div class="row" style="margin-top:8px">
-          <a id="copy" class="btn" href="#">Salin Link</a>
-          <span id="toast" class="small" aria-live="polite"></span>
-        </div>
-        <div id="copyHint" class="muted small" style="margin-top:8px">Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram.</div>
-      </section>
-      -->
-
       <section class="panel">
         <h2 id="joinTitle">Cara Join (3 langkah)</h2>
         <ol id="joinSteps"></ol>
@@ -454,7 +445,7 @@ ol li::before {
             ],
             channelsTitle: 'Channel Resmi',
             channelsHint: 'Semua link channel aktif.',
-            copyHint: 'Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram.',
+            copyHint: '',
             joinTitle: 'Cara Join (2 langkah)',
             joinSteps: [
               'Pilih salah satu channel resmi di atas.',
@@ -505,7 +496,6 @@ ol li::before {
           setText('ageText', pick('ageText'));
           setText('channelsTitle', pick('channelsTitle'));
           setText('channelsHint', pick('channelsHint'));
-          setText('copyHint', pick('copyHint'));
           setText('joinTitle', pick('joinTitle'));
           setText('botsTitle', pick('botsTitle'));
           setText('botsHint', pick('botsHint'));
@@ -552,25 +542,8 @@ ol li::before {
             }
           }
           var copySection = document.getElementById('copyTools');
-          var copyBtn = document.getElementById('copy');
-          var toast = document.getElementById('toast');
-          if (copySection && copyBtn) {
-            if (channelsData.length) {
-              copySection.style.display = '';
-              var targetLink = channelsData[0];
-              copyBtn.onclick = async function(e){
-                e.preventDefault();
-                try {
-                  await navigator.clipboard.writeText(targetLink);
-                  if (toast) toast.textContent = 'Link disalin! Tinggal tempel di Telegram.';
-                } catch (err) {
-                  if (toast) toast.textContent = 'Gagal nyalin. Klik kanan → Copy Link.';
-                }
-                if (toast) setTimeout(function(){ toast.textContent=''; }, 1800);
-              };
-            } else {
-              copySection.style.display = 'none';
-            }
+          if (copySection) {
+            copySection.remove();
           }
 
           var steps = Array.isArray(copy.joinSteps) && copy.joinSteps.length ? copy.joinSteps : fallbackCopy.joinSteps;
@@ -595,7 +568,6 @@ ol li::before {
             });
           }
 
-          var toast = document.getElementById('toast');
 
           // Bots (multi)
           var bots = Array.isArray(data.bots) ? data.bots : (bot ? [bot] : []);
