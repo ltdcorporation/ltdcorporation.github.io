@@ -104,19 +104,20 @@ async function handleTelegram(request, env) {
       // Simple menu callbacks: just show help for the command
       const map = {
         'menu:setmain': 'Kirim: /main <url>\nContoh: /main https://t.me/ltddev',
-        'menu:addmirror': 'Kirim: /addmirror <url>',
-        'menu:delmirror': 'Kirim: /delmirror <index> (mulai dari 1)',
-        'menu:status': 'Kirim: /status <teks status>',
-        'menu:update': 'Kirim: /update <teks pengumuman>',
-        'menu:addbot': 'Kirim: /addbot <url bot>',
-        'menu:delbot': 'Kirim: /delbot <index> (mulai dari 1)',
-        'menu:listupdates': 'Kirim: /updates buat liat semua update + index.',
-        'menu:delupdate': 'Kirim: /delupdate <index> (cek index pakai /updates).',
+        'menu:addmirror': 'Opsional: /setcopylist channels <url1> | <url2> | ... untuk urutkan channel. /addmirror <url> tetap bisa.',
+        'menu:delmirror': 'Reset daftar channel: /setcopylist channels default. Atau /delmirror <index>.',
+        'menu:status': 'Kirim: /status <teks status> (muncul di header).',
+        'menu:update': 'Kirim: /update <teks pengumuman> (timestamp otomatis).',
+        'menu:addbot': 'Kirim: /addbot <url bot resmi>.',
+        'menu:delbot': 'Kirim: /delbot <index> (cek urutan via /show).',
+        'menu:listupdates': 'Kirim: /updates buat lihat daftar + index.',
+        'menu:delupdate': 'Kirim: /delupdate <index> untuk hapus update.',
         'menu:editupdate': 'Kirim: /editupdate <index> <teks baru>.',
-        'menu:setcopy': 'Format: /setcopy <key> <teks>. Lihat key via /showcopy. Ketik default buat reset.',
-        'menu:setcopylist': 'Format: /setcopylist <key> item1 | item2 | item3. Pakai default buat reset.',
-        'menu:show': 'Kirim: /show (ringkasan config)',
-        'menu:showcopy': 'Kirim: /showcopy (lihat teks statis).'
+        'menu:setcopy': 'Format: /setcopy <key> <teks>. Ketik default atau - buat reset.',
+        'menu:setcopylist': 'Format: /setcopylist <key> item1 | item2 | ... (pisahkan dengan |).',
+        'menu:show': 'Kirim: /show buat ringkasan config.',
+        'menu:showcopy': 'Kirim: /showcopy buat lihat teks yang aktif.',
+        'menu:help': helpOverview()
       };
       const t = map[cq.data] || 'Pilih aksi lalu ikuti petunjuk.';
       await tgAnswerCallback(env, cq.id, 'OK');
@@ -124,8 +125,13 @@ async function handleTelegram(request, env) {
       return new Response('ok');
     }
 
+    if (text === '/help') {
+      await tgSend(env, chatId, helpOverview());
+      return new Response('ok');
+    }
+
     if (text === '/start' || text === '/menu') {
-      await tgSend(env, chatId, 'Menu Admin — pilih aksi:', menuKeyboard());
+      await tgSend(env, chatId, helpOverview(), menuKeyboard());
       return new Response('ok');
     }
 
@@ -300,38 +306,57 @@ function isAdmin(userId, env) {
   return raw.split(',').map(s=>s.trim()).filter(Boolean).includes(String(userId));
 }
 
-function helpText() {
+function helpOverview() {
   return [
-    'Perintah:',
-    '/menu — tampilkan tombol aksi',
-    '/show — lihat config sekarang',
-    '/showcopy — lihat teks statis yang lagi kepake',
-    '/main <url> — set link utama',
-    '/addmirror <url> — tambah mirror',
-    '/delmirror <index> — hapus mirror (mulai 1)',
-    '/status <teks> — set status',
-    '/update <teks> — tambah pengumuman',
-    '/updates — tampilkan daftar update + index',
-    '/delupdate <index> — hapus update (mulai 1)',
-    '/editupdate <index> <teks> — ganti isi update',
-    '/setcopy <key> <teks> — ganti teks statis (lihat key di /showcopy)',
-    '/setcopylist <key> item1 | item2 — ganti list copy',
-    '/addbot <url> — tambah bot',
-    '/delbot <index> — hapus bot (mulai 1)'  
+    'Admin Cheat Sheet:',
+    '',
+    'Channel:',
+    '  /setcopylist channels <url1> | <url2> | ... — atur urutan tombol channel (opsional).',
+    '  /setcopylist channelNames <label1> | <label2> | ... — label tombol sesuai urutan channel.',
+    '  /setcopylist channels default — balik ke latestLink + mirrors.',
+    '',
+    'Status & Update:',
+    '  /status <teks> — ubah status di header.',
+    '  /update <teks> — tambah pengumuman (timestamp WIB).',
+    '  /updates — lihat daftar + index.',
+    '  /editupdate <index> <teks> — revisi pengumuman.',
+    '  /delupdate <index> — hapus pengumuman.',
+    '',
+    'Copy Landing Page:',
+    '  /showcopy — lihat teks/list yang aktif + default key.',
+    '  /setcopy <key> <teks> — ubah teks tunggal. Pakai default atau - buat reset.',
+    '  /setcopylist <key> item1 | item2 — ubah list (pisahkan dengan |).',
+    '',
+    'Bot Resmi:',
+    '  /addbot <url> — tambah bot.',
+    '  /delbot <index> — hapus bot sesuai urutan.',
+    '',
+    'Monitoring:',
+    '  /show — lihat ringkasan config (link utama, mirrors, update terakhir).',
+    '',
+    'Tips cepat:',
+    '  - Selalu ketik default atau - untuk balikin nilai ke bawaan.',
+    '  - Pakai /setcopylist channels ... untuk semua channel utama, gak perlu mirror.',
+    '  - Kalau butuh panduan ringkas, tekan tombol "Help / Panduan" di menu.',
   ].join('\n');
+}
+
+function helpText() {
+  return 'Perintah ga dikenal. Ketik /help buat panduan lengkap.';
 }
 
 function menuKeyboard() {
   return {
     reply_markup: {
       inline_keyboard: [
-        [ { text: 'Set Main Link', callback_data: 'menu:setmain' }, { text: 'Add Mirror', callback_data: 'menu:addmirror' } ],
-        [ { text: 'Del Mirror', callback_data: 'menu:delmirror' }, { text: 'Status', callback_data: 'menu:status' } ],
-        [ { text: 'Add Bot', callback_data: 'menu:addbot' }, { text: 'Del Bot', callback_data: 'menu:delbot' } ],
-        [ { text: 'Post Update', callback_data: 'menu:update' }, { text: 'List Updates', callback_data: 'menu:listupdates' } ],
-        [ { text: 'Del Update', callback_data: 'menu:delupdate' }, { text: 'Edit Update', callback_data: 'menu:editupdate' } ],
+        [ { text: 'Set Main Link', callback_data: 'menu:setmain' }, { text: 'Urutkan Channel', callback_data: 'menu:addmirror' } ],
+        [ { text: 'Reset Channel', callback_data: 'menu:delmirror' }, { text: 'Status', callback_data: 'menu:status' } ],
+        [ { text: 'Tambah Bot', callback_data: 'menu:addbot' }, { text: 'Hapus Bot', callback_data: 'menu:delbot' } ],
+        [ { text: 'Tambah Update', callback_data: 'menu:update' }, { text: 'List Update', callback_data: 'menu:listupdates' } ],
+        [ { text: 'Hapus Update', callback_data: 'menu:delupdate' }, { text: 'Edit Update', callback_data: 'menu:editupdate' } ],
         [ { text: 'Set Copy', callback_data: 'menu:setcopy' }, { text: 'Set Copy List', callback_data: 'menu:setcopylist' } ],
-        [ { text: 'Show Config', callback_data: 'menu:show' }, { text: 'Show Copy', callback_data: 'menu:showcopy' } ]
+        [ { text: 'Show Config', callback_data: 'menu:show' }, { text: 'Show Copy', callback_data: 'menu:showcopy' } ],
+        [ { text: 'Help / Panduan', callback_data: 'menu:help' } ]
       ]
     }
   };
