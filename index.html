@@ -268,6 +268,9 @@ footer {
   box-shadow:0 6px 14px rgba(0,0,0,0.2);
   color:#fff;
 }
+.footer-metrics span strong {
+  color:var(--accent);
+}
 #age {
   position:fixed;
   inset:0;
@@ -386,6 +389,9 @@ ol li::before {
         <div class="footer-metrics">
           <span id="totalVisits">Total kunjungan: ...</span>
           <span id="uniqueVisits">Pengunjung unik: ...</span>
+          <span id="todayVisits">Hari ini: ...</span>
+          <span id="channelCount">Channel aktif: ...</span>
+          <span id="botCount">Bot aktif: ...</span>
         </div>
       </footer>
     </main>
@@ -661,6 +667,28 @@ ol li::before {
             if (!localStorage.getItem(key)) localStorage.setItem(key, '1');
             uniqueEl.textContent = 'Pengunjung unik: ' + fmt(data.value);
           }).catch(function(){ uniqueEl.textContent = 'Pengunjung unik: n/a'; });
+        }
+        var todayEl = document.getElementById('todayVisits');
+        if (todayEl) {
+          var todayKey = new Date().toISOString().slice(0, 10);
+          fetch('https://api.countapi.xyz/hit/' + namespace + '/today_' + todayKey).then(function(r){ return r.json(); }).then(function(data){
+            todayEl.textContent = 'Hari ini: ' + fmt(data.value);
+          }).catch(function(){ todayEl.textContent = 'Hari ini: n/a'; });
+        }
+        var channelEl = document.getElementById('channelCount');
+        if (channelEl) {
+          var countChannels = 0;
+          if (Array.isArray(data.channels) && data.channels.length) {
+            countChannels = data.channels.filter(Boolean).length;
+          } else {
+            countChannels = [latest].concat(Array.isArray(mirrors) ? mirrors : []).filter(Boolean).length;
+          }
+          channelEl.textContent = 'Channel aktif: ' + fmt(countChannels);
+        }
+        var botEl = document.getElementById('botCount');
+        if (botEl) {
+          var countBots = Array.isArray(data.bots) ? data.bots.filter(Boolean).length : (bot ? 1 : 0);
+          botEl.textContent = 'Bot aktif: ' + fmt(countBots);
         }
       })();
 
