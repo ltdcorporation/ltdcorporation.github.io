@@ -22,10 +22,6 @@
       "Lust to Death — pusat kanal resmi",
       "Kalau channel lagi pindah, info barunya selalu ada di sini."
     ],
-    "ctaLabel": "Masuk Channel (18+)",
-    "ctaHint": "Kalo tombol hijau ngeyel, pake cadangan di bawah ya.",
-    "planBTitle": "Plan B (kalo tombol hijau rewel)",
-    "planBHint": "Tips: abis klik \"Salin Link\", buka Telegram terus tempel link-nya di search/browser Telegram.",
     "joinTitle": "Cara Join (2 langkah)",
     "joinSteps": [
       "Pilih salah satu channel resmi di atas.",
@@ -43,7 +39,8 @@
     "footer": "Simpen halaman ini biar gampang dicari. Stay safe dan hormati rules platform.",
     "channelsTitle": "Channel Resmi",
     "channelsHint": "Semua link channel aktif.",
-    "copyHint": "Tips: abis klik \"Salin Link\", buka Telegram terus tempel link-nya di search/browser Telegram."
+    "copyHint": "Tips: abis klik \"Salin Link\", buka Telegram terus tempel link-nya di search/browser Telegram.",
+    "channelNames": []
   },
   "updates": [
     {
