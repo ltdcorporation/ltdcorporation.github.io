@@ -96,8 +96,17 @@ h2 {
   flex-direction:column;
   gap:12px;
 }
+.channel-grid {
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
 .channel-btn {
-  display:block;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:1 1 calc(50% - 12px);
+  min-width:180px;
   border-radius:12px;
   padding:16px 20px;
   background:var(--accent);
@@ -293,7 +302,7 @@ ol li::before {
 
       <section class="panel">
         <h2 id="channelsTitle">Channel Resmi</h2>
-        <div id="channels" class="stack"></div>
+        <div id="channels" class="channel-grid"></div>
         <div id="channelsHint" class="small" style="margin-top:8px">Semua link channel aktif. Pilih yang paling cocok buat kamu.</div>
       </section>
 
