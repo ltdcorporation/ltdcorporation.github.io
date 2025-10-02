@@ -387,11 +387,11 @@ ol li::before {
       <footer class="small">
         <div id="footerMessage">Simpen halaman ini biar gampang dicari kalo channel pindah. Stay safe, hormati rules platform.</div>
         <div class="footer-metrics">
-          <span id="totalVisits">Total kunjungan: ...</span>
-          <span id="uniqueVisits">Pengunjung unik: ...</span>
-          <span id="todayVisits">Hari ini: ...</span>
-          <span id="channelCount">Channel aktif: ...</span>
-          <span id="botCount">Bot aktif: ...</span>
+          <span id="totalVisits">Total kunjungan: (loading...)</span>
+          <span id="uniqueVisits">Pengunjung unik: (loading...)</span>
+          <span id="todayVisits">Hari ini: (loading...)</span>
+          <span id="channelCount">Channel aktif: (loading...)</span>
+          <span id="botCount">Bot aktif: (loading...)</span>
         </div>
       </footer>
     </main>
@@ -666,14 +666,15 @@ ol li::before {
           fetch('https://api.countapi.xyz/' + endpoint + '/' + namespace + '/unique_visitors').then(function(r){ return r.json(); }).then(function(data){
             if (!localStorage.getItem(key)) localStorage.setItem(key, '1');
             uniqueEl.textContent = 'Pengunjung unik: ' + fmt(data.value);
-          }).catch(function(){ uniqueEl.textContent = 'Pengunjung unik: n/a'; });
+          }).catch(function(){ uniqueEl.textContent = 'Pengunjung unik: error'; });
         }
         var todayEl = document.getElementById('todayVisits');
         if (todayEl) {
-          var todayKey = new Date().toISOString().slice(0, 10);
+          var now = new Date();
+          var todayKey = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
           fetch('https://api.countapi.xyz/hit/' + namespace + '/today_' + todayKey).then(function(r){ return r.json(); }).then(function(data){
             todayEl.textContent = 'Hari ini: ' + fmt(data.value);
-          }).catch(function(){ todayEl.textContent = 'Hari ini: n/a'; });
+          }).catch(function(){ todayEl.textContent = 'Hari ini: error'; });
         }
         var channelEl = document.getElementById('channelCount');
         if (channelEl) {
