@@ -405,7 +405,11 @@ async function ghGetConfig(env) {
 async function ghPutConfig(env, cfg, message) {
   const owner = env.REPO_OWNER; const repo = env.REPO_NAME; const path = env.FILE_PATH || 'updates.json';
   const sha = cfg._sha; delete cfg._sha;
-  const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(cfg, null, 2))));
+  const json = JSON.stringify(cfg, null, 2);
+  const bytes = new TextEncoder().encode(json);
+  let binary = '';
+  bytes.forEach((b) => { binary += String.fromCharCode(b); });
+  const newContent = btoa(binary);
   const body = {
     message: message || 'Update updates.json via bot',
     content: newContent,
