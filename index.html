@@ -65,7 +65,7 @@
           <a id="copy" class="btn" href="#">Salin Link</a>
           <span id="toast" class="small" aria-live="polite"></span>
         </div>
-        <div id="planBHint" class="muted small" style="margin-top:8px">Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram.</div>
+        <div id="copyHint" class="muted small" style="margin-top:8px">Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram.</div>
       </section>
 
       <section class="panel">
@@ -137,29 +137,27 @@
             ageText: 'Dengan lanjut, lo nyatakan umur 18+ dan setuju sama aturan halaman ini.',
             ageButton: 'Gue 18+ (Lanjut)',
             taglines: [
-              'Pusat Info Resmi (18+)',
-              'Kalo channel lagi pindah/kena report, link terbaru SELALU ada di sini.'
+              'Lust to Death — pusat kanal resmi',
+              'Kalau channel lagi pindah, info barunya selalu ada di sini.'
             ],
-            ctaLabel: 'Masuk Channel (18+)',
             channelsTitle: 'Channel Resmi',
-            channelsHint: 'Semua link channel aktif. Pilih yang paling cocok buat kamu.',
-            planBHint: 'Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram.',
-            joinTitle: 'Cara Join (3 langkah)',
+            channelsHint: 'Semua link channel aktif.',
+            copyHint: 'Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram.',
+            joinTitle: 'Cara Join (2 langkah)',
             joinSteps: [
-              'Install/buka Telegram dulu.',
-              'Klik tombol hijau "Masuk Channel" di atas.',
-              'Di Telegram, pencet "Join/Bergabung" — beres.'
+              'Pilih salah satu channel resmi di atas.',
+              'Buka link di Telegram lalu pencet "Join/Bergabung".'
             ],
             botsTitle: 'Bot Resmi',
-            botsHint: 'Cara pakai: Klik Mulai → pilih menu → ikutin instruksi. Gampang kok. Kalo satu lagi rewel, cobain bot lain.',
+            botsHint: 'Klik Mulai → pilih menu → ikutin instruksi. Kalo lagi rewel, coba bot lainnya.',
             updatesTitle: 'Update Terbaru',
             legalTitle: 'Legal / 18+',
             legalItems: [
               '18+ ONLY. Bukan untuk yang di bawah 18.',
-              'Konten legal dan konsensual. Ini cuma pusat info/link, tanpa konten eksplisit.',
+              'Konten legal dan konsensual. Ini cuma pusat info/link.',
               'Kalo ada masalah/DMCA, hubungi kami via bot.'
             ],
-            footer: 'Simpen halaman ini biar gampang dicari kalo channel pindah. Stay safe, hormati rules platform.'
+            footer: 'Simpen halaman ini biar gampang dicari. Stay safe dan hormati rules platform.'
           };
           var copy = data.copy || {};
           var setText = function(id, value) {
@@ -195,7 +193,7 @@
           setText('ageText', pick('ageText'));
           setText('channelsTitle', pick('channelsTitle'));
           setText('channelsHint', pick('channelsHint'));
-          setText('planBHint', pick('planBHint'));
+          setText('copyHint', pick('copyHint'));
           setText('joinTitle', pick('joinTitle'));
           setText('botsTitle', pick('botsTitle'));
           setText('botsHint', pick('botsHint'));
@@ -244,19 +242,20 @@
           }
           var copySection = document.getElementById('copyTools');
           var copyBtn = document.getElementById('copy');
-          if (copySection) {
-            if (channelsData.length && copyBtn) {
+          var toast = document.getElementById('toast');
+          if (copySection && copyBtn) {
+            if (channelsData.length) {
               copySection.style.display = '';
               var targetLink = channelsData[0];
               copyBtn.onclick = async function(e){
                 e.preventDefault();
                 try {
                   await navigator.clipboard.writeText(targetLink);
-                  toast.textContent = 'Link disalin! Tinggal tempel di Telegram.';
+                  if (toast) toast.textContent = 'Link disalin! Tinggal tempel di Telegram.';
                 } catch (err) {
-                  toast.textContent = 'Gagal nyalin. Klik kanan → Copy Link.';
+                  if (toast) toast.textContent = 'Gagal nyalin. Klik kanan → Copy Link.';
                 }
-                setTimeout(function(){ toast.textContent=''; }, 1800);
+                if (toast) setTimeout(function(){ toast.textContent=''; }, 1800);
               };
             } else {
               copySection.style.display = 'none';

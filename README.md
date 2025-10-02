@@ -25,18 +25,18 @@ Bot admin `@ltdwebadminbot` udah siap pakai. Semua perubahan landing page cukup 
 | `ageText` | Dengan lanjut, lo nyatakan umur 18+ dan setuju sama aturan halaman ini. |
 | `ageButton` | Gue 18+ (Lanjut) |
 | `channelNames` | Array label buat tombol channel (opsional, fallback ke @handle). |
-| `taglines` | 1. Pusat Info Resmi (18+) <br> 2. Kalo channel lagi pindah/kena report, link terbaru SELALU ada di sini. |
+| `taglines` | 1. Lust to Death — pusat kanal resmi <br> 2. Kalau channel pindah, info barunya selalu di sini. |
 | `channelsTitle` | Channel Resmi |
 | `channelsHint` | Semua link channel aktif. |
-| `planBHint` | Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram. |
-| `joinTitle` | Cara Join (3 langkah) |
-| `joinSteps` | 1. Install/buka Telegram dulu. <br> 2. Klik tombol hijau "Masuk Channel" di atas. <br> 3. Di Telegram, pencet "Join/Bergabung" — beres. |
+| `copyHint` | Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram. |
+| `joinTitle` | Cara Join (2 langkah) |
+| `joinSteps` | 1. Pilih salah satu channel resmi di atas. <br> 2. Buka link di Telegram lalu pencet "Join/Bergabung". |
 | `botsTitle` | Bot Resmi |
-| `botsHint` | Cara pakai: Klik Mulai → pilih menu → ikutin instruksi. Gampang kok. Kalo satu lagi rewel, cobain bot lain. |
+| `botsHint` | Klik Mulai → pilih menu → ikutin instruksi. Kalo lagi rewel, coba bot lainnya. |
 | `updatesTitle` | Update Terbaru |
 | `legalTitle` | Legal / 18+ |
-| `legalItems` | 1. 18+ ONLY. Bukan untuk yang di bawah 18. <br> 2. Konten legal dan konsensual. Ini cuma pusat info/link, tanpa konten eksplisit. <br> 3. Kalo ada masalah/DMCA, hubungi kami via bot. |
-| `footer` | Simpen halaman ini biar gampang dicari kalo channel pindah. Stay safe, hormati rules platform. |
+| `legalItems` | 1. 18+ ONLY. Bukan untuk yang di bawah 18. <br> 2. Konten legal dan konsensual. Ini cuma pusat info/link. <br> 3. Kalo ada masalah/DMCA, hubungi kami via bot. |
+| `footer` | Simpen halaman ini biar gampang dicari. Stay safe dan hormati rules platform. |
 
 `/setcopy` menerima string. `/setcopylist` pisahkan item pakai `|`. Ketik `default` (atau `-`) buat balikin ke teks bawaan.
 
