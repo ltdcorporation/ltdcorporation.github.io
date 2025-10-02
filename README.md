@@ -24,9 +24,10 @@ Bot admin `@ltdwebadminbot` udah siap pakai. Semua perubahan landing page cukup 
 | `ageTitle` | Halaman 18+ |
 | `ageText` | Dengan lanjut, lo nyatakan umur 18+ dan setuju sama aturan halaman ini. |
 | `ageButton` | Gue 18+ (Lanjut) |
+| `channelNames` | Array label buat tombol channel (opsional, fallback ke @handle). |
 | `taglines` | 1. Pusat Info Resmi (18+) <br> 2. Kalo channel lagi pindah/kena report, link terbaru SELALU ada di sini. |
 | `channelsTitle` | Channel Resmi |
-| `channelsHint` | Semua link channel aktif. Pilih yang paling cocok buat kamu. |
+| `channelsHint` | Semua link channel aktif. |
 | `planBHint` | Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram. |
 | `joinTitle` | Cara Join (3 langkah) |
 | `joinSteps` | 1. Install/buka Telegram dulu. <br> 2. Klik tombol hijau "Masuk Channel" di atas. <br> 3. Di Telegram, pencet "Join/Bergabung" — beres. |

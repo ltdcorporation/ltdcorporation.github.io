@@ -227,13 +227,17 @@
                 a.className = 'channel-btn';
                 a.href = url;
                 a.rel = 'noopener';
-                try {
-                  var u = new URL(url);
-                  var handle = u.pathname.replace(/\/+/, '').trim();
-                  a.textContent = handle ? '@' + handle : ('Channel ' + (idx + 1));
-                } catch (e) {
-                  a.textContent = 'Channel ' + (idx + 1);
+                var label = (data.channelNames && data.channelNames[idx]) ? data.channelNames[idx] : null;
+                if (!label) {
+                  try {
+                    var u = new URL(url);
+                    var handle = u.pathname.replace(/\/+/, '').trim();
+                    label = handle ? '@' + handle : ('Channel ' + (idx + 1));
+                  } catch (e) {
+                    label = 'Channel ' + (idx + 1);
+                  }
                 }
+                a.textContent = label;
                 channelWrap.appendChild(a);
               });
             }
