@@ -7,34 +7,241 @@
     <meta name="robots" content="index,follow" />
     <title>Lust to Death — Pusat Info Resmi (18+)</title>
     <style>
-      :root { --bg:#0b0b0c; --panel:#151518; --text:#e7e7ea; --sub:#a9a9b0; --accent:#E85578; --warn:#f59e0b; --muted:#1d1d22; --link:#60a5fa; }
-      html,body{height:100%}
-      body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;line-height:1.5}
-      .wrap{max-width:720px;margin:0 auto;padding:24px}
-      header{display:flex;flex-direction:column;align-items:center;gap:12px;margin:12px 0 18px}
-      #logo{display:none;width:64px;height:64px}
-      h1{font-size:24px;margin:0;font-weight:800}
-      p.sub{color:var(--sub);margin:0;text-align:center}
-      .status{font-size:14px;color:var(--sub);margin-top:4px}
-      .panel{background:var(--panel);border-radius:12px;padding:18px;margin:14px 0}
-      .cta{display:block;text-align:center;background:var(--accent);color:#fff;text-decoration:none;font-weight:800;padding:14px;border-radius:10px}
-      .cta:hover{filter:brightness(1.05)}
-      .muted{background:var(--muted);border-radius:10px;padding:12px}
-      .grid{display:grid;grid-template-columns:1fr;gap:8px}
-      .stack{display:flex;flex-direction:column;gap:8px}
-      .row{display:flex;gap:8px}
-      .btn{display:inline-block;text-align:center;text-decoration:none;background:var(--muted);color:var(--text);padding:10px;border-radius:8px;border:1px solid #2a2a31}
-      .btn:hover{filter:brightness(1.05)}
-      h2{font-size:16px;margin:12px 0 8px}
-      ol,ul{margin:8px 0 0;padding-left:18px}
-      li{margin:4px 0}
-      .small{font-size:12px;color:var(--sub)}
-      footer{margin:24px 0 8px;text-align:center}
-      .age{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;padding:16px}
-      .age .box{background:var(--panel);padding:18px;border-radius:12px;max-width:360px}
-      .hide{display:none}
-      @media(min-width:560px){ .grid{grid-template-columns:repeat(3,1fr)} }
-    </style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+:root {
+  --bg:#14191f;
+  --panel:#1b2028;
+  --panel-alt:#1f252e;
+  --border:#212831;
+  --text:#ddd;
+  --muted:#6c7e93;
+  --accent:#e85578;
+  --accent-hover:#e53f66;
+  --accent-active:#e22854;
+  --shadow:0 18px 40px rgba(0,0,0,0.35);
+  --control-bg:#1b2028;
+  --control-bg-light:#212831;
+  --text-on-dark:#14191f;
+}
+* {
+  box-sizing:border-box;
+}
+body {
+  margin:0;
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height:1.55;
+}
+a {
+  color:var(--accent);
+  text-decoration:none;
+  transition:color .2s ease, background .2s ease;
+}
+a:hover {
+  color:var(--accent-hover);
+}
+.wrap {
+  max-width:860px;
+  margin:0 auto;
+  padding:32px 24px 56px;
+}
+header {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  text-align:center;
+  margin:12px 0 24px;
+}
+#logo {
+  display:none;
+  width:72px;
+  height:72px;
+}
+#brand {
+  font-size:2.4rem;
+  margin:0;
+  color:#fff;
+  letter-spacing:-0.01em;
+  font-weight:700;
+}
+p.sub {
+  margin:0;
+  color:var(--muted);
+  font-size:1rem;
+}
+#status {
+  margin-top:8px;
+  font-weight:600;
+  color:var(--accent);
+}
+.panel {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:24px;
+  margin:20px 0;
+  box-shadow:var(--shadow);
+}
+h2 {
+  margin:0 0 16px;
+  font-size:1.25rem;
+  letter-spacing:0.01em;
+  color:#fff;
+}
+.stack {
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.channel-btn {
+  display:block;
+  border-radius:12px;
+  padding:16px 20px;
+  background:var(--accent);
+  color:var(--text-on-dark);
+  font-weight:600;
+  font-size:1.05rem;
+  box-shadow:0 10px 24px rgba(232,85,120,0.25);
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.channel-btn:hover {
+  background:var(--accent-hover);
+  transform:translateY(-2px);
+  box-shadow:0 16px 28px rgba(232,85,120,0.3);
+}
+.channel-btn:active {
+  background:var(--accent-active);
+  transform:translateY(0);
+}
+.small {
+  color:var(--muted);
+  font-size:0.9rem;
+  line-height:1.5;
+}
+.row {
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 16px;
+  border-radius:10px;
+  background:var(--control-bg);
+  color:var(--text);
+  border:1px solid var(--border);
+  font-weight:500;
+  transition:background .2s ease, color .2s ease, border .2s ease;
+}
+.btn:hover {
+  background:var(--control-bg-light);
+  border-color:var(--accent);
+  color:#fff;
+}
+#channelsHint, #copyHint {
+  margin-top:12px;
+  color:var(--muted);
+}
+#updates {
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+#updates li {
+  background:var(--panel-alt);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px 18px;
+  color:var(--muted);
+  font-size:0.95rem;
+}
+#legalItems {
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  color:var(--muted);
+}
+#legalItems li {
+  position:relative;
+  padding-left:22px;
+}
+#legalItems li::before {
+  content:'•';
+  position:absolute;
+  left:6px;
+  color:var(--accent);
+  font-size:1.2rem;
+  line-height:1;
+}
+footer {
+  margin-top:32px;
+  text-align:center;
+  color:var(--muted);
+  font-size:0.9rem;
+}
+#age {
+  background:rgba(10,12,15,0.92);
+  backdrop-filter:blur(12px);
+}
+#age .box {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:28px;
+  box-shadow:var(--shadow);
+}
+#ageYes {
+  margin-top:12px;
+}
+ol {
+  list-style:none;
+  margin:0;
+  padding:0;
+  color:var(--muted);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  counter-reset:step;
+}
+ol li {
+  position:relative;
+  padding-left:28px;
+}
+ol li::before {
+  content:counter(step);
+  counter-increment:step;
+  position:absolute;
+  left:0;
+  top:2px;
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:rgba(232,85,120,0.18);
+  color:var(--accent);
+  font-weight:600;
+  font-size:0.85rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+@media (max-width:600px) {
+  .wrap { padding:28px 20px 48px; }
+  #brand { font-size:2rem; }
+  .panel { padding:20px; }
+}
+</style></style>
   </head>
   <body>
     <div id="age" class="age">
