@@ -21,6 +21,7 @@
       .cta:hover{filter:brightness(1.05)}
       .muted{background:var(--muted);border-radius:10px;padding:12px}
       .grid{display:grid;grid-template-columns:1fr;gap:8px}
+      .stack{display:flex;flex-direction:column;gap:8px}
       .row{display:flex;gap:8px}
       .btn{display:inline-block;text-align:center;text-decoration:none;background:var(--muted);color:var(--text);padding:10px;border-radius:8px;border:1px solid #2a2a31}
       .btn:hover{filter:brightness(1.05)}
@@ -54,17 +55,12 @@
       </header>
 
       <section class="panel">
-        <a id="btnJoin" class="cta" href="#">Masuk Channel (18+)</a>
-        <div id="ctaHint" class="small" style="margin-top:8px">Kalo tombol hijau ngeyel, pake cadangan di bawah ya.</div>
+        <h2 id="channelsTitle">Channel Resmi</h2>
+        <div id="channels" class="stack"></div>
+        <div id="channelsHint" class="small" style="margin-top:8px">Semua link channel aktif. Pilih yang paling cocok buat kamu.</div>
       </section>
 
-      <section class="panel">
-        <h2 id="planBTitle">Plan B (kalo tombol hijau rewel)</h2>
-        <div class="grid">
-          <a id="m1" class="btn" href="#">Cadangan 1</a>
-          <a id="m2" class="btn" href="#">Cadangan 2</a>
-          <a id="m3" class="btn" href="#">Cadangan 3</a>
-        </div>
+      <section class="panel" id="copyTools" style="display:none">
         <div class="row" style="margin-top:8px">
           <a id="copy" class="btn" href="#">Salin Link</a>
           <span id="toast" class="small" aria-live="polite"></span>
@@ -145,8 +141,8 @@
               'Kalo channel lagi pindah/kena report, link terbaru SELALU ada di sini.'
             ],
             ctaLabel: 'Masuk Channel (18+)',
-            ctaHint: 'Kalo tombol hijau ngeyel, pake cadangan di bawah ya.',
-            planBTitle: 'Plan B (kalo tombol hijau rewel)',
+            channelsTitle: 'Channel Resmi',
+            channelsHint: 'Semua link channel aktif. Pilih yang paling cocok buat kamu.',
             planBHint: 'Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram.',
             joinTitle: 'Cara Join (3 langkah)',
             joinSteps: [
@@ -197,8 +193,8 @@
 
           setText('ageTitle', pick('ageTitle'));
           setText('ageText', pick('ageText'));
-          setText('ctaHint', pick('ctaHint'));
-          setText('planBTitle', pick('planBTitle'));
+          setText('channelsTitle', pick('channelsTitle'));
+          setText('channelsHint', pick('channelsHint'));
           setText('planBHint', pick('planBHint'));
           setText('joinTitle', pick('joinTitle'));
           setText('botsTitle', pick('botsTitle'));
@@ -212,9 +208,56 @@
           }
 
           document.getElementById('status').textContent = status;
-          var btn = document.getElementById('btnJoin');
-          btn.href = latest;
-          btn.textContent = pick('ctaLabel');
+
+          var channelsData = [];
+          if (Array.isArray(data.channels) && data.channels.length) {
+            channelsData = data.channels;
+          } else {
+            channelsData = [latest].concat(Array.isArray(mirrors) ? mirrors : []);
+          }
+          channelsData = channelsData.filter(Boolean);
+          var channelWrap = document.getElementById('channels');
+          if (channelWrap) {
+            channelWrap.innerHTML = '';
+            if (!channelsData.length) {
+              channelWrap.parentElement.style.display = 'none';
+            } else {
+              channelsData.forEach(function(url, idx){
+                var a = document.createElement('a');
+                a.className = 'channel-btn';
+                a.href = url;
+                a.rel = 'noopener';
+                try {
+                  var u = new URL(url);
+                  var handle = u.pathname.replace(/\/+/, '').trim();
+                  a.textContent = handle ? '@' + handle : ('Channel ' + (idx + 1));
+                } catch (e) {
+                  a.textContent = 'Channel ' + (idx + 1);
+                }
+                channelWrap.appendChild(a);
+              });
+            }
+          }
+          var copySection = document.getElementById('copyTools');
+          var copyBtn = document.getElementById('copy');
+          if (copySection) {
+            if (channelsData.length && copyBtn) {
+              copySection.style.display = '';
+              var targetLink = channelsData[0];
+              copyBtn.onclick = async function(e){
+                e.preventDefault();
+                try {
+                  await navigator.clipboard.writeText(targetLink);
+                  toast.textContent = 'Link disalin! Tinggal tempel di Telegram.';
+                } catch (err) {
+                  toast.textContent = 'Gagal nyalin. Klik kanan → Copy Link.';
+                }
+                setTimeout(function(){ toast.textContent=''; }, 1800);
+              };
+            } else {
+              copySection.style.display = 'none';
+            }
+          }
 
           var steps = Array.isArray(copy.joinSteps) && copy.joinSteps.length ? copy.joinSteps : fallbackCopy.joinSteps;
           var stepsEl = document.getElementById('joinSteps');
@@ -238,27 +281,7 @@
             });
           }
 
-          // Mirrors
-          var m1 = document.getElementById('m1');
-          var m2 = document.getElementById('m2');
-          var m3 = document.getElementById('m3');
-          var setOrHide = function(el, url){ if(url){ el.href=url; el.style.display='inline-block'; } else { el.style.display='none'; } };
-          setOrHide(m1, mirrors[0]);
-          setOrHide(m2, mirrors[1]);
-          setOrHide(m3, mirrors[2]);
-
-          // Copy link
           var toast = document.getElementById('toast');
-          document.getElementById('copy').onclick = async function(e){
-            e.preventDefault();
-            try{
-              await navigator.clipboard.writeText(latest);
-              toast.textContent = 'Link disalin! Tinggal tempel di Telegram.';
-            }catch(err){
-              toast.textContent = 'Gagal nyalin. Klik kanan → Copy Link.';
-            }
-            setTimeout(function(){ toast.textContent=''; }, 1800);
-          };
 
           // Bots (multi)
           var bots = Array.isArray(data.bots) ? data.bots : (bot ? [bot] : []);
