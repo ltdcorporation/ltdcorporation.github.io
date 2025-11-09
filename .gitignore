@@ -1,3 +1,4 @@
 # Dev-only secrets for the worker. Keep them out of git.
 bot-worker/.dev.vars
 counter-service/.env
+local.creds.md
