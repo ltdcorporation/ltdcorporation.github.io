@@ -113,3 +113,10 @@ Bot otomatis commit ke branch `main` repo ini, jadi cukup gunakan command di ata
 - Logo mencari `logo.svg` kemudian `logo.png` lalu `logo.jpg`. Kalau tidak ada, otomatis disembunyikan.
 - Sebelum backup/migrasi: simpan `updates.json` + tag git release.
 - Untuk rollback landing page: `git checkout v1.0.0`
+
+## Visitor Counter API
+- Kode sumber ada di `counter-service/` (FastAPI + Postgres).
+- Endpoint utama: `POST /hit` dan `GET /count/{namespace}`.
+- Butuh `DATABASE_URL` Postgres; lihat `counter-service/.env.example`.
+- Jalankan lokal: `uvicorn app.main:app --reload --port 8787`.
+- Setelah deploy di server sendiri, update script di `index.html` supaya memanggil domain API milikmu alih-alih CountAPI.
