@@ -38,13 +38,14 @@ Ketik `/help` di bot buat nampilin catatan ini kapan aja. Versi teksnya:
   `/showcopy`
 - **Ganti teks tunggal:** `/setcopy ageTitle Tulisan baru`
 - **Balikkan teks tunggal ke default:** `/setcopy ageTitle default` (bisa juga pakai `-`)
-- **Ganti list (taglines / joinSteps / channelNames / legalItems / dll):**  
+- **Ganti list (taglines / joinSteps / channelNames / botNames / legalItems / dll):**  
   `/setcopylist taglines Baris 1 | Baris 2 | Baris 3`
 - **Reset list ke default:** `/setcopylist taglines default`
 
 ### Bot Resmi
 - `/addbot https://t.me/namabot`
 - `/delbot 2` → hapus bot nomor 2 (lihat urutan di `/show`)
+- `/setcopylist botNames Nama 1 | Nama 2 | ...` → label tombol bot sesuai urutan daftar bot
 
 ### Monitoring
 - `/show` → ringkasan link utama, mirrors, bot, update terakhir
@@ -73,6 +74,7 @@ Bot otomatis commit ke branch `main` repo ini, jadi cukup gunakan command di ata
 | `ageButton` | Gue 18+ (Lanjut) |
 | `taglines` | 1. Lust to Death — pusat kanal resmi <br> 2. Kalau channel lagi pindah, info barunya selalu ada di sini. |
 | `channelNames` | [] (fallback ke @handle) |
+| `botNames` | [] (fallback ke @handle) |
 | `channelsTitle` | Channel Resmi |
 | `channelsHint` | Semua link channel aktif. |
 | `copyHint` | Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram. |

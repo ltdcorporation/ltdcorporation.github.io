@@ -572,6 +572,12 @@ ol li::before {
 
           // Bots (multi)
           var bots = Array.isArray(data.bots) ? data.bots : (bot ? [bot] : []);
+          var botNames = null;
+          if (Array.isArray(copy.botNames) && copy.botNames.length) {
+            botNames = copy.botNames;
+          } else if (Array.isArray(data.botNames) && data.botNames.length) {
+            botNames = data.botNames;
+          }
           var botsWrap = document.getElementById('bots');
           if (botsWrap) {
             if (bots.length === 0) {
@@ -582,14 +588,17 @@ ol li::before {
                 a.className = 'bot-btn';
                 a.href = url;
                 a.rel = 'noopener';
-                // Label: pakai handle dari URL atau Bot 1/2/3
-                try {
-                  var u = new URL(url);
-                  var handle = u.pathname.replace(/\/+/, '').trim();
-                  a.textContent = handle ? '@' + handle : ('Bot ' + (idx+1));
-                } catch (e) {
-                  a.textContent = 'Bot ' + (idx+1);
+                var label = (botNames && botNames[idx]) ? botNames[idx] : null;
+                if (!label) {
+                  try {
+                    var u = new URL(url);
+                    var handle = u.pathname.replace(/\/+/, '').trim();
+                    label = handle ? '@' + handle : ('Bot ' + (idx+1));
+                  } catch (e) {
+                    label = 'Bot ' + (idx+1);
+                  }
                 }
+                a.textContent = label;
                 botsWrap.appendChild(a);
               });
             }

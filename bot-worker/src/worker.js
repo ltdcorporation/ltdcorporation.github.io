@@ -1,7 +1,7 @@
 // Cloudflare Worker: Telegram admin bot that updates updates.json in GitHub Pages repo
 
 const COPY_STRING_FIELDS = {ageTitle: true, ageText: true, ageButton: true, channelsTitle: true, channelsHint: true, copyHint: true, joinTitle: true, botsTitle: true, botsHint: true, updatesTitle: true, legalTitle: true, footer: true};
-const COPY_LIST_FIELDS = {channelNames: true, taglines: true, joinSteps: true, legalItems: true};
+const COPY_LIST_FIELDS = {channelNames: true, botNames: true, taglines: true, joinSteps: true, legalItems: true};
 const DEFAULT_COPY = {
   ageTitle: 'Halaman 18+',
   ageText: 'Dengan lanjut, lo nyatakan umur 18+ dan setuju sama aturan halaman ini.',
@@ -11,6 +11,7 @@ const DEFAULT_COPY = {
     'Kalau channel lagi pindah, info barunya selalu ada di sini.'
   ],
   channelNames: [],
+  botNames: [],
   channelsTitle: 'Channel Resmi',
   channelsHint: 'Semua link channel aktif.',
   copyHint: 'Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram.',
@@ -111,6 +112,7 @@ async function handleTelegram(request, env) {
         'menu:orderchannels': 'Urutkan tombol channel manual: /setcopylist channels link1 | link2 | link3.',
         'menu:labelchannels': 'Kasih nama tombol channel: /setcopylist channelNames Nama1 | Nama2 | Nama3 (urutan sesuai link).',
         'menu:resetchannels': 'Balikin tombol channel ke default: /setcopylist channels default (atau ketik -).',
+        'menu:labelbots': 'Kasih nama tombol bot: /setcopylist botNames Nama1 | Nama2 | ... (urutan sesuai daftar bot).',
         'menu:status': 'Update status header hijau: /status <teks status>.',
         'menu:update': 'Tambah pengumuman: /update <teks>. Timestamp WIB otomatis.',
         'menu:listupdates': 'Liat daftar update dan indeksnya: /updates.',
@@ -341,6 +343,7 @@ function helpOverview() {
     'BOT RESMI',
     '- /addbot https://t.me/namabot -> tambah bot.',
     '- /delbot 2                   -> hapus bot nomor 2 (cek urutan di /show).',
+    '- /setcopylist botNames Nama 1 | Nama 2 | ... -> kasih label tombol bot (urutan sama kayak daftar bot).',
     '',
     'MONITORING',
     '- /show -> ringkasan link utama, mirrors, bot, update terakhir.',
@@ -377,7 +380,8 @@ function menuKeyboard() {
         ],
         [
           { text: 'Tambah Bot', callback_data: 'menu:addbot' },
-          { text: 'Hapus Bot', callback_data: 'menu:delbot' }
+          { text: 'Hapus Bot', callback_data: 'menu:delbot' },
+          { text: 'Label Bot', callback_data: 'menu:labelbots' }
         ],
         [
           { text: 'Edit Teks', callback_data: 'menu:setcopy' },
