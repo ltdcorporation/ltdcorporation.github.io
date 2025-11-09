@@ -34,11 +34,11 @@ Ketik `/help` di bot buat nampilin catatan ini kapan aja. Versi teksnya:
 4. **Edit/hapus:** `/editupdate 2 Bot sudah normal` atau `/delupdate 3`
 
 ### Copy Landing Page
-- **Langkah 1 – cek nama field yang lagi aktif (ageTitle, footer, taglines, joinSteps, channelNames, legalItems, dll):**  
+- **Langkah 1 – cek nama field yang lagi aktif (ageTitle, footer, taglines, channelNames, botNames, legalItems, dll):**  
   `/showcopy`
 - **Ganti teks tunggal:** `/setcopy ageTitle Tulisan baru`
 - **Balikkan teks tunggal ke default:** `/setcopy ageTitle default` (bisa juga pakai `-`)
-- **Ganti list (taglines / joinSteps / channelNames / botNames / legalItems / dll):**  
+- **Ganti list (taglines / channelNames / botNames / legalItems / dll):**  
   `/setcopylist taglines Baris 1 | Baris 2 | Baris 3`
 - **Reset list ke default:** `/setcopylist taglines default`
 
@@ -79,7 +79,6 @@ Bot otomatis commit ke branch `main` repo ini, jadi cukup gunakan command di ata
 | `channelsHint` | Semua link channel aktif. |
 | `copyHint` | Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram. |
 | `joinTitle` | Cara Join (2 langkah) |
-| `joinSteps` | 1. Pilih salah satu channel resmi di atas. <br> 2. Buka link di Telegram lalu pencet "Join/Bergabung". |
 | `botsTitle` | Bot Resmi |
 | `botsHint` | Klik Mulai → pilih menu → ikutin instruksi. Kalo lagi rewel, coba bot lainnya. |
 | `updatesTitle` | Update Terbaru |

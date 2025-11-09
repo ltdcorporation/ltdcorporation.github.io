@@ -441,11 +441,6 @@ ol li::before {
             channelsTitle: 'Channel Resmi',
             channelsHint: 'Semua link channel aktif.',
             copyHint: '',
-            joinTitle: 'Cara Join (2 langkah)',
-            joinSteps: [
-              'Pilih salah satu channel resmi di atas.',
-              'Buka link di Telegram lalu pencet "Join/Bergabung".'
-            ],
             botsTitle: 'Bot Resmi',
             botsHint: 'Klik Mulai → pilih menu → ikutin instruksi. Kalo lagi rewel, coba bot lainnya.',
             updatesTitle: 'Update Terbaru',
@@ -545,17 +540,6 @@ ol li::before {
           var copySection = document.getElementById('copyTools');
           if (copySection) {
             copySection.remove();
-          }
-
-          var steps = Array.isArray(copy.joinSteps) && copy.joinSteps.length ? copy.joinSteps : fallbackCopy.joinSteps;
-          var stepsEl = document.getElementById('joinSteps');
-          if (stepsEl) {
-            stepsEl.innerHTML = '';
-            steps.forEach(function(step){
-              var li = document.createElement('li');
-              li.textContent = step;
-              stepsEl.appendChild(li);
-            });
           }
 
           var legal = Array.isArray(copy.legalItems) && copy.legalItems.length ? copy.legalItems : fallbackCopy.legalItems;

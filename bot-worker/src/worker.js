@@ -1,7 +1,7 @@
 // Cloudflare Worker: Telegram admin bot that updates updates.json in GitHub Pages repo
 
-const COPY_STRING_FIELDS = {ageTitle: true, ageText: true, ageButton: true, channelsTitle: true, channelsHint: true, copyHint: true, joinTitle: true, botsTitle: true, botsHint: true, updatesTitle: true, legalTitle: true, footer: true};
-const COPY_LIST_FIELDS = {channelNames: true, botNames: true, taglines: true, joinSteps: true, legalItems: true};
+const COPY_STRING_FIELDS = {ageTitle: true, ageText: true, ageButton: true, channelsTitle: true, channelsHint: true, copyHint: true, botsTitle: true, botsHint: true, updatesTitle: true, legalTitle: true, footer: true};
+const COPY_LIST_FIELDS = {channelNames: true, botNames: true, taglines: true, legalItems: true};
 const DEFAULT_COPY = {
   ageTitle: 'Halaman 18+',
   ageText: 'Dengan lanjut, lo nyatakan umur 18+ dan setuju sama aturan halaman ini.',
@@ -15,11 +15,6 @@ const DEFAULT_COPY = {
   channelsTitle: 'Channel Resmi',
   channelsHint: 'Semua link channel aktif.',
   copyHint: 'Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram.',
-  joinTitle: 'Cara Join (2 langkah)',
-  joinSteps: [
-    'Pilih salah satu channel resmi di atas.',
-    'Buka link di Telegram lalu pencet "Join/Bergabung".'
-  ],
   botsTitle: 'Bot Resmi',
   botsHint: 'Klik Mulai → pilih menu → ikutin instruksi. Kalo lagi rewel, coba bot lainnya.',
   updatesTitle: 'Update Terbaru',
