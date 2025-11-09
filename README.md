@@ -11,34 +11,33 @@ Landing page ini statis full teks + Cloudflare Worker supaya semua update bisa d
 | `bot-worker/` | Cloudflare Worker + skrip bot admin |
 
 ## Bot Admin – Ringkasan Perintah
-Gunakan `/help` di bot buat lihat panduan ini langsung di Telegram. Berikut cheat sheet per kategori:
+Ketik `/help` di bot buat nampilin catatan ini kapan aja. Versi teksnya:
 
-### 1. Channel
-- `/setcopylist channels <url1> | <url2> | ...` → set urutan tombol channel (opsional).
-- `/setcopylist channelNames <label1> | <label2> | ...` → set label tombol sesuai urutan channel.
-- `/setcopylist channels default` → balik ke `latestLink + mirrors` bawaan.
+### Channel (atur tombol)
+- **Urutkan link:** `/setcopylist channels <url1> | <url2> | ...`
+- **Kasih label tombol:** `/setcopylist channelNames <label1> | <label2> | ...`
+- **Balik ke default:** `/setcopylist channels default`
 
-### 2. Status & Update
-- `/status <teks>` → ganti status di header.
-- `/update <teks>` → tambah pengumuman (timestamp otomatis WIB).
-- `/updates` → lihat daftar update + index.
-- `/editupdate <index> <teks baru>` → revisi pengumuman.
-- `/delupdate <index>` → hapus pengumuman.
+### Status & Update (pengumuman)
+- **Ganti status header:** `/status <teks>`
+- **Tambah pengumuman:** `/update <teks>` (timestamp otomatis WIB)
+- **Lihat daftar:** `/updates`
+- **Edit / hapus:** `/editupdate <index> <teks baru>` atau `/delupdate <index>`
 
-### 3. Copy Landing Page
-- `/showcopy` → lihat teks/list yang lagi aktif beserta default-nya.
-- `/setcopy <key> <teks>` → ganti teks tunggal. Ketik `default` atau `-` untuk reset.
-- `/setcopylist <key> item1 | item2 | ...` → ganti list (pisahkan dengan `|`).
+### Copy Landing Page (teks/list)
+- **Preview semua teks/list:** `/showcopy`
+- **Ganti teks tunggal:** `/setcopy <key> <teks>` (pakai `default` atau `-` buat reset)
+- **Ganti list:** `/setcopylist <key> item1 | item2 | ...` (pisahkan dengan tanda `|`)
 
-### 4. Bot Resmi
-- `/addbot <url>` → tambah bot resmi.
-- `/delbot <index>` → hapus bot sesuai urutan (lihat `/show`).
+### Bot Resmi
+- **Tambah bot:** `/addbot <url>`
+- **Hapus bot:** `/delbot <index>` (cek urutan via `/show`)
 
-### 5. Monitoring
-- `/show` → ringkasan config (link utama, daftar channel/bot, update terakhir).
-- `/help` → tampilkan panduan lengkap + tombol pintasan.
+### Monitoring / Misc
+- **Ringkasan config:** `/show`
+- **Panduan cepat:** `/help`
 
-> Gunakan `default` atau `-` di command copy/list untuk balikin ke nilai bawaan.
+> Tips: setiap command copy/list bisa dikembalikan ke nilai bawaan dengan mengetik `default` atau `-` di parameternya.
 
 ## Format `updates.json`
 ```json

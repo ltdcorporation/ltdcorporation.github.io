@@ -308,32 +308,32 @@ function isAdmin(userId, env) {
 
 function helpOverview() {
   return [
-    'Cheatsheet Admin:',
+    'Cheatsheet Admin (singkat):',
     '',
-    'Channel:',
-    '- /setcopylist channels <url1> | <url2> | ... -> ngatur urutan tombol channel.',
-    '- /setcopylist channelNames <nama1> | <nama2> | ... -> ngasih label tombol.',
-    '- /setcopylist channels default -> reset ke link bawaan.',
+    '[Channel]',
+    '  - /setcopylist channels <url1> | <url2> | ...   => urutkan tombol channel.',
+    '  - /setcopylist channelNames <nama1> | <nama2>  => kasih label per tombol.',
+    '  - /setcopylist channels default                => balik ke urutan bawaan.',
     '',
-    'Status & Update:',
-    '- /status <teks> -> update status header.',
-    '- /update <teks> -> tambah pengumuman (timestamp otomatis).',
-    '- /updates -> liat daftar + index.',
-    '- /editupdate <index> <teks baru> -> edit pengumuman.',
-    '- /delupdate <index> -> hapus pengumuman.',
+    '[Status & Update]',
+    '  - /status <teks>           => ganti teks status header.',
+    '  - /update <teks>           => tambah pengumuman + timestamp otomatis.',
+    '  - /updates                 => liat daftar + index.',
+    '  - /editupdate <idx> <teks> => edit pengumuman nomor tertentu.',
+    '  - /delupdate <idx>         => hapus pengumuman.',
     '',
-    'Copy Halaman:',
-    '- /showcopy -> liat teks/list yang aktif + nama key.',
-    '- /setcopy <key> <teks> -> ganti teks, pake default atau - buat reset.',
-    '- /setcopylist <key> item1 | item2 -> ganti list, pisah pake |.',
+    '[Copy Halaman]',
+    '  - /showcopy                         => liat teks/list aktif + nama key.',
+    '  - /setcopy <key> <teks>             => ganti teks; ketik default atau - buat reset.',
+    '  - /setcopylist <key> item1 | item2  => ganti list; pisah pakai tanda |.',
     '',
-    'Bot Resmi:',
-    '- /addbot <url> -> masukin bot.',
-    '- /delbot <index> -> hapus bot sesuai urutan.',
+    '[Bot Resmi]',
+    '  - /addbot <url>   => masukin bot baru.',
+    '  - /delbot <index> => hapus bot sesuai urutan di /show.',
     '',
-    'Monitoring:',
-    '- /show -> ringkasan config.',
-    '- /help -> balik ke panduan ini kapan aja.'
+    '[Monitoring]',
+    '  - /show => ringkasan config.',
+    '  - /help => tampilin panduan ini kapan aja.'
   ].join('\n');
 }
 
@@ -468,4 +468,3 @@ async function tgAnswerCallback(env, cbId, text) {
   const url = `https://api.telegram.org/bot${env.BOT_TOKEN}/answerCallbackQuery`;
   await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ callback_query_id: cbId, text }) });
 }
-
