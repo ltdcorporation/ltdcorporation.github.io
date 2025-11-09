@@ -13,31 +13,31 @@ Landing page ini statis full teks + Cloudflare Worker supaya semua update bisa d
 ## Bot Admin – Ringkasan Perintah
 Ketik `/help` di bot buat nampilin catatan ini kapan aja. Versi teksnya:
 
-### Channel (atur tombol)
-- **Urutkan link:** `/setcopylist channels <url1> | <url2> | ...`
-- **Kasih label tombol:** `/setcopylist channelNames <label1> | <label2> | ...`
-- **Balik ke default:** `/setcopylist channels default`
+### Channel (atur tombol link)
+- **Urutkan link channel:** `/setcopylist channels link1 | link2 | ...` — ketik semua link dari kiri ke kanan, pisahkan dengan tanda `|`. Contoh: `/setcopylist channels https://t.me/ltddev | https://t.me/lusttodeath`.
+- **Namai tombolnya:** `/setcopylist channelNames nama1 | nama2 | ...` — urutannya wajib sama kayak daftar link di atas.
+- **Balik default:** `/setcopylist channels default` — pakai lagi urutan bawaan (link utama + mirrors).
 
 ### Status & Update (pengumuman)
-- **Ganti status header:** `/status <teks>`
-- **Tambah pengumuman:** `/update <teks>` (timestamp otomatis WIB)
+- **Ganti teks status:** `/status Status baru`
+- **Tambah pengumuman:** `/update Pengumuman baru` (timestamp WIB otomatis)
 - **Lihat daftar:** `/updates`
-- **Edit / hapus:** `/editupdate <index> <teks baru>` atau `/delupdate <index>`
+- **Edit/hapus:** `/editupdate nomor teks baru` atau `/delupdate nomor`. Contoh: `/editupdate 2 Bot sudah normal`.
 
-### Copy Landing Page (teks/list)
-- **Preview semua teks/list:** `/showcopy`
-- **Ganti teks tunggal:** `/setcopy <key> <teks>` (pakai `default` atau `-` buat reset)
-- **Ganti list:** `/setcopylist <key> item1 | item2 | ...` (pisahkan dengan tanda `|`)
+### Copy Landing Page (semua teks/list)
+- **Lihat daftar field:** `/showcopy` — muncul nama field kaya `ageTitle`, `footer`, `taglines`, dll.
+- **Ganti teks tunggal:** `/setcopy namaField teks baru`. Contoh: `/setcopy legalTitle Legal / 18+`. Ketik `default` atau `-` buat reset.
+- **Ganti list:** `/setcopylist namaField item1 | item2 | ...` buat field list (misal `taglines`, `joinSteps`). Pisahkan dengan `|`. Ketik `default` atau `-` buat reset.
 
 ### Bot Resmi
-- **Tambah bot:** `/addbot <url>`
-- **Hapus bot:** `/delbot <index>` (cek urutan via `/show`)
+- **Tambah bot:** `/addbot https://t.me/namabot`
+- **Hapus bot:** `/delbot nomor` — nomor sesuai urutan di `/show`.
 
 ### Monitoring / Misc
-- **Ringkasan config:** `/show`
-- **Panduan cepat:** `/help`
+- **Ringkasan cepat:** `/show`
+- **Buka catatan ini:** `/help`
 
-> Tips: setiap command copy/list bisa dikembalikan ke nilai bawaan dengan mengetik `default` atau `-` di parameternya.
+> Tips: semua command copy/list bisa balik ke default cukup ketik `default` atau `-` sebagai teks pengganti.
 
 ## Format `updates.json`
 ```json
