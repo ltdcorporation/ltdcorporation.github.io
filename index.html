@@ -516,12 +516,18 @@ ol li::before {
             if (!channelsData.length) {
               channelWrap.parentElement.style.display = 'none';
             } else {
+              var channelNames = null;
+              if (Array.isArray(copy.channelNames) && copy.channelNames.length) {
+                channelNames = copy.channelNames;
+              } else if (Array.isArray(data.channelNames) && data.channelNames.length) {
+                channelNames = data.channelNames;
+              }
               channelsData.forEach(function(url, idx){
                 var a = document.createElement('a');
                 a.className = 'channel-btn';
                 a.href = url;
                 a.rel = 'noopener';
-                var label = (data.channelNames && data.channelNames[idx]) ? data.channelNames[idx] : null;
+                var label = (channelNames && channelNames[idx]) ? channelNames[idx] : null;
                 if (!label) {
                   try {
                     var u = new URL(url);
