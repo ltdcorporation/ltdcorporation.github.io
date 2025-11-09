@@ -34,7 +34,7 @@ Ketik `/help` di bot buat nampilin catatan ini kapan aja. Versi teksnya:
 4. **Edit/hapus:** `/editupdate 2 Bot sudah normal` atau `/delupdate 3`
 
 ### Copy Landing Page
-- **Langkah 1 – cek nama field yang lagi aktif (ageTitle, footer, taglines, channelNames, botNames, legalItems, dll):**  
+- **Langkah 1 – cek nama field yang lagi aktif (ageTitle, footer, taglines, channelNames, botNames, visitorsTitle, visitorsHint, legalItems, dll):**  
   `/showcopy`
 - **Ganti teks tunggal:** `/setcopy ageTitle Tulisan baru`
 - **Balikkan teks tunggal ke default:** `/setcopy ageTitle default` (bisa juga pakai `-`)
@@ -78,7 +78,8 @@ Bot otomatis commit ke branch `main` repo ini, jadi cukup gunakan command di ata
 | `channelsTitle` | Channel Resmi |
 | `channelsHint` | Semua link channel aktif. |
 | `copyHint` | Tips: abis klik "Salin Link", buka Telegram terus tempel link-nya di search/browser Telegram. |
-| `joinTitle` | Cara Join (2 langkah) |
+| `visitorsTitle` | Total Pengunjung |
+| `visitorsHint` | Angka ini otomatis nambah tiap halaman dibuka. |
 | `botsTitle` | Bot Resmi |
 | `botsHint` | Klik Mulai → pilih menu → ikutin instruksi. Kalo lagi rewel, coba bot lainnya. |
 | `updatesTitle` | Update Terbaru |

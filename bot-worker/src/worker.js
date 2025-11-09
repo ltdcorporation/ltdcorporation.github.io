@@ -1,6 +1,6 @@
 // Cloudflare Worker: Telegram admin bot that updates updates.json in GitHub Pages repo
 
-const COPY_STRING_FIELDS = {ageTitle: true, ageText: true, ageButton: true, channelsTitle: true, channelsHint: true, copyHint: true, botsTitle: true, botsHint: true, updatesTitle: true, legalTitle: true, footer: true};
+const COPY_STRING_FIELDS = {ageTitle: true, ageText: true, ageButton: true, channelsTitle: true, channelsHint: true, copyHint: true, botsTitle: true, botsHint: true, updatesTitle: true, legalTitle: true, footer: true, visitorsTitle: true, visitorsHint: true};
 const COPY_LIST_FIELDS = {channelNames: true, botNames: true, taglines: true, legalItems: true};
 const DEFAULT_COPY = {
   ageTitle: 'Halaman 18+',
@@ -24,7 +24,9 @@ const DEFAULT_COPY = {
     'Konten legal dan konsensual. Ini cuma pusat info/link.',
     'Kalo ada masalah/DMCA, hubungi kami via bot.'
   ],
-  footer: 'Simpen halaman ini biar gampang dicari. Stay safe dan hormati rules platform.'
+  footer: 'Simpen halaman ini biar gampang dicari. Stay safe dan hormati rules platform.',
+  visitorsTitle: 'Total Pengunjung',
+  visitorsHint: 'Angka ini otomatis nambah tiap halaman dibuka.'
 };
 
 

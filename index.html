@@ -189,6 +189,21 @@ h2 {
   transform:translateY(0);
   box-shadow:0 10px 20px rgba(0,0,0,0.24);
 }
+.visitor-panel {
+  text-align:center;
+}
+.visitor-count {
+  font-size:2.6rem;
+  font-weight:700;
+  margin:0 0 8px;
+  color:#fff;
+}
+.visitor-count.is-error {
+  color:var(--muted);
+}
+.visitor-hint {
+  margin:0;
+}
 #channelsHint, #copyHint {
   margin-top:12px;
   color:var(--muted);
@@ -367,6 +382,12 @@ ol li::before {
         <ul id="updates"></ul>
       </section>
 
+      <section class="panel visitor-panel">
+        <h2 id="visitorsTitle">Total Pengunjung</h2>
+        <p id="visitorCount" class="visitor-count">—</p>
+        <p id="visitorsHint" class="small visitor-hint">Angka ini otomatis nambah tiap halaman dibuka.</p>
+      </section>
+
       <section class="panel">
         <h2 id="legalTitle">Legal / 18+</h2>
         <ul id="legalItems" class="small"></ul>
@@ -415,6 +436,24 @@ ol li::before {
         tryNext(['logo.svg','logo.png','logo.jpg'], 0);
       })();
 
+      async function updateVisitorCount(el) {
+        if (!el) return;
+        try {
+          var response = await fetch('https://api.countapi.xyz/hit/ltdcorp/asiafap.com');
+          if (!response.ok) throw new Error('Failed to fetch counter');
+          var payload = await response.json();
+          if (typeof payload.value === 'number') {
+            el.textContent = new Intl.NumberFormat('id-ID').format(payload.value);
+            el.classList.remove('is-error');
+          } else {
+            throw new Error('Invalid counter value');
+          }
+        } catch (err) {
+          el.textContent = '—';
+          el.classList.add('is-error');
+        }
+      }
+
       // Load updates.json and wire UI
       (async function(){
         try{
@@ -444,6 +483,8 @@ ol li::before {
             botsTitle: 'Bot Resmi',
             botsHint: 'Klik Mulai → pilih menu → ikutin instruksi. Kalo lagi rewel, coba bot lainnya.',
             updatesTitle: 'Update Terbaru',
+            visitorsTitle: 'Total Pengunjung',
+            visitorsHint: 'Angka ini otomatis nambah tiap halaman dibuka.',
             legalTitle: 'Legal / 18+',
             legalItems: [
               '18+ ONLY. Bukan untuk yang di bawah 18.',
@@ -486,11 +527,12 @@ ol li::before {
           setText('ageText', pick('ageText'));
           setText('channelsTitle', pick('channelsTitle'));
           setText('channelsHint', pick('channelsHint'));
-          setText('joinTitle', pick('joinTitle'));
           setText('botsTitle', pick('botsTitle'));
           setText('botsHint', pick('botsHint'));
           setText('updatesTitle', pick('updatesTitle'));
           setText('legalTitle', pick('legalTitle'));
+          setText('visitorsTitle', pick('visitorsTitle'));
+          setText('visitorsHint', pick('visitorsHint'));
           setText('footerMessage', pick('footer'));          var ageBtn = document.getElementById('ageYes');
           if (ageBtn) {
             ageBtn.textContent = pick('ageButton');
@@ -611,59 +653,10 @@ ol li::before {
             li.appendChild(textSpan);
             list.appendChild(li);
           });
+          await updateVisitorCount(document.getElementById('visitorCount'));
         }catch(e){
           document.getElementById('status').textContent = 'Lagi nyambungin data… kalo lama, refresh ya.';
-        }
-      })();
-      // Visitor metrics via countapi.xyz
-      (function(){
-        var totalEl = document.getElementById('totalVisits');
-        var uniqueEl = document.getElementById('uniqueVisits');
-        var namespace = 'asiafap_com';
-        function fmt(val){
-          try { return Number(val || 0).toLocaleString('id-ID'); } catch (_) { return val; }
-        }
-        function fetchCount(url, ok, fail){
-          fetch(url).then(function(r){ return r.json(); }).then(function(data){
-            if (!data || typeof data.value === 'undefined') throw new Error('no value');
-            ok(data.value);
-          }).catch(function(){ fail(); });
-        }
-        if (totalEl) {
-          fetchCount('https://api.countapi.xyz/hit/' + namespace + '/site_visits', function(val){
-            totalEl.textContent = 'Total kunjungan: ' + fmt(val);
-          }, function(){ totalEl.textContent = 'Total kunjungan: error'; });
-        }
-        if (uniqueEl) {
-          var key = 'asiafap_unique_seen';
-          var endpoint = localStorage.getItem(key) ? 'get' : 'hit';
-          fetchCount('https://api.countapi.xyz/' + endpoint + '/' + namespace + '/unique_visitors', function(val){
-            if (!localStorage.getItem(key)) localStorage.setItem(key, '1');
-            uniqueEl.textContent = 'Pengunjung unik: ' + fmt(val);
-          }, function(){ uniqueEl.textContent = 'Pengunjung unik: error'; });
-        }
-        var todayEl = document.getElementById('todayVisits');
-        if (todayEl) {
-          var now = new Date();
-          var todayKey = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
-          fetchCount('https://api.countapi.xyz/hit/' + namespace + '/today_' + todayKey, function(val){
-            todayEl.textContent = 'Hari ini: ' + fmt(val);
-          }, function(){ todayEl.textContent = 'Hari ini: error'; });
-        }
-        var channelEl = document.getElementById('channelCount');
-        if (channelEl) {
-          var countChannels = 0;
-          if (Array.isArray(data.channels) && data.channels.length) {
-            countChannels = data.channels.filter(Boolean).length;
-          } else {
-            countChannels = [latest].concat(Array.isArray(mirrors) ? mirrors : []).filter(Boolean).length;
-          }
-          channelEl.textContent = 'Channel aktif: ' + fmt(countChannels);
-        }
-        var botEl = document.getElementById('botCount');
-        if (botEl) {
-          var countBots = Array.isArray(data.bots) ? data.bots.filter(Boolean).length : (bot ? 1 : 0);
-          botEl.textContent = 'Bot aktif: ' + fmt(countBots);
+          updateVisitorCount(document.getElementById('visitorCount'));
         }
       })();
 
