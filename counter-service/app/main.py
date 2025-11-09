@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -8,6 +9,20 @@ from .db import engine, session_scope, ensure_schema
 from .schemas import HitRequest, CounterResponse
 
 app = FastAPI(title="LTD Visitor Counter", version="1.0.0")
+allowed_origins = [
+    "https://asiafap.com",
+    "https://www.asiafap.com",
+    "https://ltdcorporation.github.io",
+    "https://ltdcorporation.github.io/ltdcorporation.github.io",
+    "http://localhost:4173",
+    "http://localhost:5173",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 settings = get_settings()
 ensure_schema()
 

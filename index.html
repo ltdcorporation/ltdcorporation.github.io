@@ -436,21 +436,52 @@ ol li::before {
         tryNext(['logo.svg','logo.png','logo.jpg'], 0);
       })();
 
+      const COUNTER_API_ENDPOINT = window.COUNTER_API_ENDPOINT || 'https://counter-api.asiafap.com';
+      const COUNTER_NAMESPACE = 'asiafap.com';
+
+      function formatCount(value) {
+        try {
+          return new Intl.NumberFormat('id-ID').format(value);
+        } catch (_) {
+          return String(value);
+        }
+      }
+
+      async function legacyCountApiFallback(el) {
+        try {
+          const response = await fetch('https://api.countapi.xyz/hit/ltdcorp/asiafap.com');
+          if (!response.ok) throw new Error('countapi error');
+          const payload = await response.json();
+          if (typeof payload.value === 'number') {
+            el.textContent = formatCount(payload.value);
+            el.classList.remove('is-error');
+            return true;
+          }
+        } catch (_) { /* noop */ }
+        el.textContent = '—';
+        el.classList.add('is-error');
+        return false;
+      }
+
       async function updateVisitorCount(el) {
         if (!el) return;
         try {
-          var response = await fetch('https://api.countapi.xyz/hit/ltdcorp/asiafap.com');
-          if (!response.ok) throw new Error('Failed to fetch counter');
-          var payload = await response.json();
+          const response = await fetch(`${COUNTER_API_ENDPOINT}/hit`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ namespace: COUNTER_NAMESPACE })
+          });
+          if (!response.ok) throw new Error('counter api error');
+          const payload = await response.json();
           if (typeof payload.value === 'number') {
-            el.textContent = new Intl.NumberFormat('id-ID').format(payload.value);
+            el.textContent = formatCount(payload.value);
             el.classList.remove('is-error');
-          } else {
-            throw new Error('Invalid counter value');
+            return;
           }
+          throw new Error('invalid payload');
         } catch (err) {
-          el.textContent = '—';
-          el.classList.add('is-error');
+          console.warn('Primary counter API failed, fallback to CountAPI', err);
+          await legacyCountApiFallback(el);
         }
       }
 
