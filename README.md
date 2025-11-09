@@ -13,31 +13,35 @@ Landing page ini statis full teks + Cloudflare Worker supaya semua update bisa d
 ## Bot Admin – Ringkasan Perintah
 Ketik `/help` di bot buat nampilin catatan ini kapan aja. Versi teksnya:
 
-### Channel (atur tombol link)
-- **Urutkan link channel:** `/setcopylist channels link1 | link2 | ...` — ketik semua link dari kiri ke kanan, pisahkan dengan tanda `|`. Contoh: `/setcopylist channels https://t.me/ltddev | https://t.me/lusttodeath`.
-- **Namai tombolnya:** `/setcopylist channelNames nama1 | nama2 | ...` — urutannya wajib sama kayak daftar link di atas.
-- **Balik default:** `/setcopylist channels default` — pakai lagi urutan bawaan (link utama + mirrors).
+### Channel Buttons
+1. **Susun ulang link:**  
+   `/setcopylist channels link1 | link2 | link3`  
+   Contoh: `/setcopylist channels https://t.me/ltddev | https://t.me/lusttodeath`
+2. **Kasih nama tombol:**  
+   `/setcopylist channelNames Nama 1 | Nama 2 | Nama 3` (urutan nama = urutan link)
+3. **Balik ke default:**  
+   `/setcopylist channels default`
 
-### Status & Update (pengumuman)
-- **Ganti teks status:** `/status Status baru`
-- **Tambah pengumuman:** `/update Pengumuman baru` (timestamp WIB otomatis)
-- **Lihat daftar:** `/updates`
-- **Edit/hapus:** `/editupdate nomor teks baru` atau `/delupdate nomor`. Contoh: `/editupdate 2 Bot sudah normal`.
+### Status & Update
+1. **Status header:** `/status Channel aman`
+2. **Tambah pengumuman:** `/update Pesan terbaru` (timestamp WIB otomatis)
+3. **Lihat daftar:** `/updates` (nomor urut dipake buat edit/hapus)
+4. **Edit/hapus:** `/editupdate 2 Bot sudah normal` atau `/delupdate 3`
 
-### Copy Landing Page (semua teks/list)
-- **Lihat daftar field:** `/showcopy` — muncul nama field kaya `ageTitle`, `footer`, `taglines`, dll.
-- **Ganti teks tunggal:** `/setcopy namaField teks baru`. Contoh: `/setcopy legalTitle Legal / 18+`. Ketik `default` atau `-` buat reset.
-- **Ganti list:** `/setcopylist namaField item1 | item2 | ...` buat field list (misal `taglines`, `joinSteps`). Pisahkan dengan `|`. Ketik `default` atau `-` buat reset.
+### Copy Landing Page
+- **Lihat semua field (ageTitle, footer, taglines, dll):** `/showcopy`
+- **Ganti teks tunggal:** `/setcopy ageTitle Tulisan baru`
+- **Balik ke default:** `/setcopy ageTitle default` (bisa juga pakai `-`)
+- **Ganti list (taglines/joinSteps/channelNames/dll):**  
+  `/setcopylist taglines Baris 1 | Baris 2 | Baris 3`
 
 ### Bot Resmi
-- **Tambah bot:** `/addbot https://t.me/namabot`
-- **Hapus bot:** `/delbot nomor` — nomor sesuai urutan di `/show`.
+- `/addbot https://t.me/namabot`
+- `/delbot 2` → hapus bot nomor 2 (lihat urutan di `/show`)
 
-### Monitoring / Misc
-- **Ringkasan cepat:** `/show`
-- **Buka catatan ini:** `/help`
-
-> Tips: semua command copy/list bisa balik ke default cukup ketik `default` atau `-` sebagai teks pengganti.
+### Monitoring
+- `/show` → ringkasan link utama, mirrors, bot, update terakhir
+- `/help` → tampilin catatan ini kapan aja
 
 ## Format `updates.json`
 ```json
