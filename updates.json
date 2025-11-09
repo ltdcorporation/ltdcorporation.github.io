@@ -4,7 +4,6 @@
   "latestLink": "https://t.me/ltddev",
   "mirrors": [
     "https://t.me/lusttodeath",
-    "https://t.me/bawcollection",
     "https://t.me/jpncoded"
   ],
   "bots": [
@@ -48,6 +47,10 @@
     ]
   },
   "updates": [
+    {
+      "ts": "2025-11-09T04:12:21+07:00",
+      "text": "Mirror dihapus: https://t.me/bawcollection"
+    },
     {
       "ts": "2025-10-02T10:39:13+07:00",
       "text": "bot sudah aktif semua lurrr"
