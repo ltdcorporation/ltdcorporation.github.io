@@ -34,11 +34,13 @@ Ketik `/help` di bot buat nampilin catatan ini kapan aja. Versi teksnya:
 4. **Edit/hapus:** `/editupdate 2 Bot sudah normal` atau `/delupdate 3`
 
 ### Copy Landing Page
-- **Lihat semua field (ageTitle, footer, taglines, dll):** `/showcopy`
+- **Langkah 1 – cek nama field yang lagi aktif (ageTitle, footer, taglines, joinSteps, channelNames, legalItems, dll):**  
+  `/showcopy`
 - **Ganti teks tunggal:** `/setcopy ageTitle Tulisan baru`
-- **Balik ke default:** `/setcopy ageTitle default` (bisa juga pakai `-`)
-- **Ganti list (taglines/joinSteps/channelNames/dll):**  
+- **Balikkan teks tunggal ke default:** `/setcopy ageTitle default` (bisa juga pakai `-`)
+- **Ganti list (taglines / joinSteps / channelNames / legalItems / dll):**  
   `/setcopylist taglines Baris 1 | Baris 2 | Baris 3`
+- **Reset list ke default:** `/setcopylist taglines default`
 
 ### Bot Resmi
 - `/addbot https://t.me/namabot`
