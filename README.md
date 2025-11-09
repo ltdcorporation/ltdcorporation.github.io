@@ -13,13 +13,18 @@ Landing page ini statis full teks + Cloudflare Worker supaya semua update bisa d
 ## Bot Admin – Ringkasan Perintah
 Ketik `/help` di bot buat nampilin catatan ini kapan aja. Versi teksnya:
 
-### Channel Buttons
-1. **Susun ulang link:**  
-   `/setcopylist channels link1 | link2 | link3`  
-   Contoh: `/setcopylist channels https://t.me/ltddev | https://t.me/lusttodeath`
-2. **Kasih nama tombol:**  
-   `/setcopylist channelNames Nama 1 | Nama 2 | Nama 3` (urutan nama = urutan link)
-3. **Balik ke default:**  
+### Channel & Link
+1. **Ganti link utama:**  
+   `/main https://t.me/ltddev`
+2. **Tambah channel/mirror cadangan:**  
+   `/addmirror https://t.me/lusttodeath`
+3. **Hapus channel/mirror nomor tertentu (lihat urutan di `/show`):**  
+   `/delmirror 2`
+4. **Susun tombol manual:**  
+   `/setcopylist channels link1 | link2 | link3`
+5. **Kasih label tombol sesuai urutan link:**  
+   `/setcopylist channelNames Nama 1 | Nama 2 | Nama 3`
+6. **Balik ke default (kombinasi main + mirrors):**  
    `/setcopylist channels default`
 
 ### Status & Update

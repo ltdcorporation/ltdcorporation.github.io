@@ -103,20 +103,25 @@ async function handleTelegram(request, env) {
     if (cq && cq.data) {
       // Simple menu callbacks: just show help for the command
       const map = {
-        'menu:setmain': 'Ketik: /main <url> (ganti link utama). Contoh: /main https://t.me/ltddev',
-        'menu:addmirror': 'Ngatur urutan channel: /setcopylist channels <url1> | <url2> | ...',
-        'menu:delmirror': 'Reset urutan channel: /setcopylist channels default',
-        'menu:status': 'Update status header: /status <teks>',
-        'menu:update': 'Tambah pengumuman: /update <teks>',
-        'menu:addbot': 'Masukin bot resmi: /addbot https://t.me/namabot',
-        'menu:delbot': 'Hapus bot: /delbot <index> (cek di /show)',
-        'menu:listupdates': 'Liat daftar update: /updates',
-        'menu:delupdate': 'Hapus update: /delupdate <index>',
-        'menu:editupdate': 'Edit update: /editupdate <index> <teks baru>',
-        'menu:setcopy': 'Ganti teks: /setcopy <key> <teks>. default/- buat reset.',
-        'menu:setcopylist': 'Ganti list: /setcopylist <key> item1 | item2 | ...',
-        'menu:show': 'Ringkasan config: /show',
-        'menu:showcopy': 'Liat semua copy: /showcopy',
+        'menu:setmain': 'Ganti link utama (tombol hijau): /main https://t.me/namalink.',
+        'menu:addchannel': 'Tambah channel/mirror baru: /addmirror https://t.me/namalink.',
+        'menu:addmirror': 'Tambah channel/mirror baru: /addmirror https://t.me/namalink.',
+        'menu:delchannel': 'Hapus channel/mirror: /delmirror <nomor>. Lihat nomor di /show.',
+        'menu:delmirror': 'Hapus channel/mirror: /delmirror <nomor>. Lihat nomor di /show.',
+        'menu:orderchannels': 'Urutkan tombol channel manual: /setcopylist channels link1 | link2 | link3.',
+        'menu:labelchannels': 'Kasih nama tombol channel: /setcopylist channelNames Nama1 | Nama2 | Nama3 (urutan sesuai link).',
+        'menu:resetchannels': 'Balikin tombol channel ke default: /setcopylist channels default (atau ketik -).',
+        'menu:status': 'Update status header hijau: /status <teks status>.',
+        'menu:update': 'Tambah pengumuman: /update <teks>. Timestamp WIB otomatis.',
+        'menu:listupdates': 'Liat daftar update dan indeksnya: /updates.',
+        'menu:editupdate': 'Edit pengumuman tertentu: /editupdate <nomor> <teks baru>.',
+        'menu:delupdate': 'Hapus pengumuman tertentu: /delupdate <nomor>.',
+        'menu:addbot': 'Tambah bot resmi: /addbot https://t.me/namabot.',
+        'menu:delbot': 'Hapus bot: /delbot <nomor>. Urutan bisa diliat dari /show.',
+        'menu:setcopy': 'Ganti teks halaman: /setcopy <namaField> <teks>. default atau - buat reset (cek field via /showcopy).',
+        'menu:setcopylist': 'Ganti list (taglines/joinSteps/channelNames/dll): /setcopylist <namaField> item1 | item2 | ...',
+        'menu:showcopy': 'Liat daftar field teks/list + nilai aktif: /showcopy.',
+        'menu:show': 'Ringkasan config + urutan channel/bot: /show.',
         'menu:help': helpOverview()
       };
       const t = map[cq.data] || 'Pilih aksi lalu ikuti petunjuk.';
@@ -310,44 +315,33 @@ function helpOverview() {
   return [
     'Cheatsheet Admin:',
     '',
-    'CHANNEL BUTTONS',
-    '1) Susun ulang link:',
-    '   /setcopylist channels link1 | link2 | link3',
-    '   Contoh: /setcopylist channels https://t.me/ltddev | https://t.me/lusttodeath',
-    '2) Kasih nama tombol:',
-    '   /setcopylist channelNames Nama 1 | Nama 2 | Nama 3',
-    '   Urutan nama harus sama dengan urutan link.',
-    '3) Balik ke default:',
-    '   /setcopylist channels default',
+    'CHANNEL & LINK',
+    '- /main https://t.me/...          -> ganti link utama (tombol hijau).',
+    '- /addmirror https://t.me/...     -> tambah channel/mirror cadangan.',
+    '- /delmirror 2                    -> hapus channel/mirror nomor 2 (lihat urutan di /show).',
+    '- /setcopylist channels link1 | link2 | ... -> urutkan tombol manual.',
+    '- /setcopylist channelNames Nama 1 | Nama 2 | ... -> kasih label tombol.',
+    '- /setcopylist channels default   -> reset tombol ke kombinasi main + mirrors.',
     '',
     'STATUS & UPDATE',
-    '1) Status header hijau:',
-    '   /status Channel aman',
-    '2) Tambah pengumuman:',
-    '   /update Pesan terbaru (timestamp WIB otomatis)',
-    '3) Lihat daftar pengumuman:',
-    '   /updates (nomor urut dipake buat edit/hapus)',
-    '4) Edit pengumuman nomor X:',
-    '   /editupdate 2 Bot sudah normal',
-    '5) Hapus pengumuman nomor X:',
-    '   /delupdate 3',
+    '- /status Status baru          -> update status header hijau.',
+    '- /update Pengumuman baru      -> tambah notifikasi (timestamp WIB otomatis).',
+    '- /updates                     -> liat daftar + nomor urut.',
+    '- /editupdate 2 Teks baru      -> revisi pengumuman tertentu.',
+    '- /delupdate 3                 -> hapus pengumuman nomor 3.',
     '',
     'COPY LANDING PAGE',
-    '- Liat daftar field (ageTitle, footer, taglines, dst): /showcopy',
-    '- Ganti teks tunggal:',
-    '  /setcopy ageTitle Tulisan baru',
-    '- Balikin teks ke default:',
-    '  /setcopy ageTitle default  (boleh juga pakai tanda - )',
-    '- Ganti list (taglines, joinSteps, channelNames, dll):',
-    '  /setcopylist taglines Baris 1 | Baris 2 | Baris 3',
+    '- /showcopy                    -> liat semua field teks/list (ageTitle, footer, taglines, dst).',
+    '- /setcopy field teks baru     -> ganti teks tunggal. default atau - buat reset.',
+    '- /setcopylist field item1 | item2 | ... -> ganti list (taglines, joinSteps, channelNames, legalItems, dst).',
     '',
     'BOT RESMI',
-    '- Tambah bot: /addbot https://t.me/namabot',
-    '- Hapus bot nomor X: /delbot 2  (lihat urutan di /show)',
+    '- /addbot https://t.me/namabot -> tambah bot.',
+    '- /delbot 2                   -> hapus bot nomor 2 (cek urutan di /show).',
     '',
     'MONITORING',
-    '- /show  -> ringkasan link utama, mirrors, bot, update terakhir',
-    '- /help  -> tampilkan catatan ini kapan aja'
+    '- /show -> ringkasan link utama, mirrors, bot, update terakhir.',
+    '- /help -> tampilkan catatan ini kapan aja.'
   ].join('\n');
 }
 
@@ -359,14 +353,38 @@ function menuKeyboard() {
   return {
     reply_markup: {
       inline_keyboard: [
-        [ { text: 'Ganti Link Utama', callback_data: 'menu:setmain' }, { text: 'Urutkan Channel', callback_data: 'menu:addmirror' } ],
-        [ { text: 'Reset Channel', callback_data: 'menu:delmirror' }, { text: 'Update Status', callback_data: 'menu:status' } ],
-        [ { text: 'Tambah Bot', callback_data: 'menu:addbot' }, { text: 'Hapus Bot', callback_data: 'menu:delbot' } ],
-        [ { text: 'Tambah Update', callback_data: 'menu:update' }, { text: 'Daftar Update', callback_data: 'menu:listupdates' } ],
-        [ { text: 'Hapus Update', callback_data: 'menu:delupdate' }, { text: 'Edit Update', callback_data: 'menu:editupdate' } ],
-        [ { text: 'Edit Teks', callback_data: 'menu:setcopy' }, { text: 'Edit List', callback_data: 'menu:setcopylist' } ],
-        [ { text: 'Lihat Config', callback_data: 'menu:show' }, { text: 'Lihat Copy', callback_data: 'menu:showcopy' } ],
-        [ { text: 'Help / Panduan', callback_data: 'menu:help' } ]
+        [
+          { text: 'Ganti Link Utama', callback_data: 'menu:setmain' },
+          { text: 'Tambah Channel', callback_data: 'menu:addchannel' },
+          { text: 'Hapus Channel', callback_data: 'menu:delchannel' }
+        ],
+        [
+          { text: 'Urutkan Channel', callback_data: 'menu:orderchannels' },
+          { text: 'Label Channel', callback_data: 'menu:labelchannels' },
+          { text: 'Reset Channel', callback_data: 'menu:resetchannels' }
+        ],
+        [
+          { text: 'Update Status', callback_data: 'menu:status' },
+          { text: 'Tambah Update', callback_data: 'menu:update' },
+          { text: 'Daftar Update', callback_data: 'menu:listupdates' }
+        ],
+        [
+          { text: 'Edit Update', callback_data: 'menu:editupdate' },
+          { text: 'Hapus Update', callback_data: 'menu:delupdate' }
+        ],
+        [
+          { text: 'Tambah Bot', callback_data: 'menu:addbot' },
+          { text: 'Hapus Bot', callback_data: 'menu:delbot' }
+        ],
+        [
+          { text: 'Edit Teks', callback_data: 'menu:setcopy' },
+          { text: 'Edit List', callback_data: 'menu:setcopylist' },
+          { text: 'Lihat Copy', callback_data: 'menu:showcopy' }
+        ],
+        [
+          { text: 'Lihat Config', callback_data: 'menu:show' },
+          { text: 'Help / Panduan', callback_data: 'menu:help' }
+        ]
       ]
     }
   };
