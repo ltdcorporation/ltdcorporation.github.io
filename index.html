@@ -190,19 +190,75 @@ h2 {
   box-shadow:0 10px 20px rgba(0,0,0,0.24);
 }
 .visitor-panel {
-  text-align:center;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+.visitor-header {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
 }
 .visitor-count {
-  font-size:2.6rem;
+  font-size:2.8rem;
   font-weight:700;
-  margin:0 0 8px;
+  margin:0 0 4px;
   color:#fff;
 }
 .visitor-count.is-error {
   color:var(--muted);
 }
+.visitor-status {
+  color:var(--muted);
+}
+.visitor-subgrid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:12px;
+}
+.stat-card {
+  background:var(--control-bg-light);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px 16px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.stat-label {
+  font-size:0.8rem;
+  color:var(--muted);
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+}
+.stat-value {
+  font-size:1.4rem;
+  font-weight:600;
+  color:#fff;
+}
+.visitor-count.is-loading,
+.stat-value.is-loading {
+  position:relative;
+  color:transparent;
+}
+.visitor-count.is-loading::after,
+.stat-value.is-loading::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:8px;
+  background:linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+  background-size:200% 100%;
+  animation:skeleton 1.4s linear infinite;
+}
 .visitor-hint {
   margin:0;
+}
+@keyframes skeleton {
+  from { background-position:200% 0; }
+  to { background-position:-200% 0; }
 }
 #channelsHint, #copyHint {
   margin-top:12px;
@@ -383,9 +439,24 @@ ol li::before {
       </section>
 
       <section class="panel visitor-panel">
-        <h2 id="visitorsTitle">Total Pengunjung</h2>
-        <p id="visitorCount" class="visitor-count">—</p>
-        <p id="visitorsHint" class="small visitor-hint">Angka ini otomatis nambah tiap halaman dibuka.</p>
+        <div class="visitor-main">
+          <div class="visitor-header">
+            <h2 id="visitorsTitle">Total Pengunjung</h2>
+            <span id="visitorStatus" class="visitor-status small"></span>
+          </div>
+          <p id="visitorCount" class="visitor-count" data-value="0">—</p>
+          <p id="visitorsHint" class="small visitor-hint">Angka ini otomatis nambah tiap halaman dibuka.</p>
+        </div>
+        <div class="visitor-subgrid">
+          <div class="stat-card">
+            <span class="stat-label">Hari ini</span>
+            <span class="stat-value" data-counter="today" data-value="0">—</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Unique hari ini</span>
+            <span class="stat-value" data-counter="unique" data-value="0">—</span>
+          </div>
+        </div>
       </section>
 
       <section class="panel">
@@ -438,6 +509,26 @@ ol li::before {
 
       const COUNTER_API_ENDPOINT = window.COUNTER_API_ENDPOINT || 'https://counter-api.asiafap.com';
       const COUNTER_NAMESPACE = 'asiafap.com';
+      const VISITOR_ID_KEY = 'ltdVisitorId';
+      const statElements = {
+        total: document.getElementById('visitorCount'),
+        today: document.querySelector('[data-counter="today"]'),
+        unique: document.querySelector('[data-counter="unique"]'),
+        status: document.getElementById('visitorStatus')
+      };
+
+      function getVisitorId() {
+        try {
+          const stored = localStorage.getItem(VISITOR_ID_KEY);
+          if (stored) return stored;
+          const newId = crypto.randomUUID ? crypto.randomUUID() : (Date.now().toString(36) + Math.random().toString(36).slice(2));
+          localStorage.setItem(VISITOR_ID_KEY, newId);
+          return newId;
+        } catch (_) {
+          return (Date.now().toString(36) + Math.random().toString(36).slice(2));
+        }
+      }
+      const VISITOR_ID = getVisitorId();
 
       function formatCount(value) {
         try {
@@ -447,41 +538,99 @@ ol li::before {
         }
       }
 
-      async function legacyCountApiFallback(el) {
-        try {
-          const response = await fetch('https://api.countapi.xyz/hit/ltdcorp/asiafap.com');
-          if (!response.ok) throw new Error('countapi error');
-          const payload = await response.json();
-          if (typeof payload.value === 'number') {
-            el.textContent = formatCount(payload.value);
-            el.classList.remove('is-error');
-            return true;
-          }
-        } catch (_) { /* noop */ }
-        el.textContent = '—';
-        el.classList.add('is-error');
-        return false;
+      function setLoading(state) {
+        const method = state ? 'add' : 'remove';
+        ['total', 'today', 'unique'].forEach((key) => {
+          const el = statElements[key];
+          if (el) el.classList[method]('is-loading');
+        });
       }
 
-      async function updateVisitorCount(el) {
+      function animateCount(el, target) {
         if (!el) return;
+        const start = Number(el.dataset.value || 0);
+        const end = Number(target || 0);
+        el.dataset.value = end;
+        if (!isFinite(start) || !isFinite(end)) {
+          el.textContent = '—';
+          return;
+        }
+        if (start === end) {
+          el.textContent = formatCount(end);
+          return;
+        }
+        const duration = 600;
+        const startTime = performance.now();
+        function tick(now) {
+          const progress = Math.min((now - startTime) / duration, 1);
+          const current = Math.round(start + (end - start) * progress);
+          el.textContent = formatCount(current);
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+
+      async function legacyCountApiFallback() {
+        const response = await fetch('https://api.countapi.xyz/hit/ltdcorp/asiafap.com');
+        if (!response.ok) throw new Error('countapi error');
+        const payload = await response.json();
+        if (typeof payload.value !== 'number') throw new Error('invalid payload');
+        return { value: payload.value, today: null, unique_today: null, throttled: false, fallback: true };
+      }
+
+      async function fetchCounterStats() {
+        const response = await fetch(`${COUNTER_API_ENDPOINT}/hit`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ namespace: COUNTER_NAMESPACE, visitor_id: VISITOR_ID })
+        });
+        if (!response.ok) throw new Error('counter api error');
+        return response.json();
+      }
+
+      function applyStats(payload) {
+        if (!payload) return;
+        animateCount(statElements.total, payload.value);
+        animateCount(statElements.today, payload.today ?? 0);
+        animateCount(statElements.unique, payload.unique_today ?? 0);
+        if (statElements.total) statElements.total.classList.remove('is-error');
+        if (payload.fallback && statElements.status) {
+          statElements.status.textContent = 'Counter fallback sementara.';
+        } else if (payload.throttled && statElements.status) {
+          statElements.status.textContent = 'Baru aja dihitung, tunggu 10 detik biar nambah lagi.';
+        } else if (statElements.status) {
+          statElements.status.textContent = '';
+        }
+      }
+
+      async function updateVisitorStats() {
+        if (!statElements.total) return;
+        setLoading(true);
         try {
-          const response = await fetch(`${COUNTER_API_ENDPOINT}/hit`, {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ namespace: COUNTER_NAMESPACE })
-          });
-          if (!response.ok) throw new Error('counter api error');
-          const payload = await response.json();
-          if (typeof payload.value === 'number') {
-            el.textContent = formatCount(payload.value);
-            el.classList.remove('is-error');
-            return;
-          }
-          throw new Error('invalid payload');
+          const payload = await fetchCounterStats();
+          applyStats(payload);
         } catch (err) {
           console.warn('Primary counter API failed, fallback to CountAPI', err);
-          await legacyCountApiFallback(el);
+          try {
+            const fallback = await legacyCountApiFallback();
+            fallback.today = null;
+            fallback.unique_today = null;
+            applyStats(fallback);
+            if (statElements.today) statElements.today.textContent = '—';
+            if (statElements.unique) statElements.unique.textContent = '—';
+          } catch (fallbackErr) {
+            console.warn('Fallback counter failed', fallbackErr);
+            ['total', 'today', 'unique'].forEach((key) => {
+              const el = statElements[key];
+              if (el) {
+                el.textContent = '—';
+                el.classList.add('is-error');
+              }
+            });
+            if (statElements.status) statElements.status.textContent = 'Counter offline.';
+          }
+        } finally {
+          setLoading(false);
         }
       }
 
@@ -684,10 +833,10 @@ ol li::before {
             li.appendChild(textSpan);
             list.appendChild(li);
           });
-          await updateVisitorCount(document.getElementById('visitorCount'));
+          await updateVisitorStats();
         }catch(e){
           document.getElementById('status').textContent = 'Lagi nyambungin data… kalo lama, refresh ya.';
-          updateVisitorCount(document.getElementById('visitorCount'));
+          updateVisitorStats();
         }
       })();
 

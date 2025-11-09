@@ -25,6 +25,26 @@ CREATE TABLE IF NOT EXISTS counters (
     count BIGINT NOT NULL DEFAULT 0,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS daily_stats (
+    namespace TEXT NOT NULL,
+    day DATE NOT NULL,
+    total BIGINT NOT NULL DEFAULT 0,
+    unique_hits BIGINT NOT NULL DEFAULT 0,
+    PRIMARY KEY(namespace, day)
+);
+
+CREATE TABLE IF NOT EXISTS visitor_uniques (
+    namespace TEXT NOT NULL,
+    day DATE NOT NULL,
+    visitor_hash TEXT NOT NULL,
+    PRIMARY KEY(namespace, day, visitor_hash)
+);
+
+CREATE TABLE IF NOT EXISTS visitor_activity (
+    visitor_hash TEXT PRIMARY KEY,
+    last_hit TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 """
 
 def ensure_schema():

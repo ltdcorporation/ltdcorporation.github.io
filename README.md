@@ -115,8 +115,10 @@ Bot otomatis commit ke branch `main` repo ini, jadi cukup gunakan command di ata
 - Untuk rollback landing page: `git checkout v1.0.0`
 
 ## Visitor Counter API
-- Kode sumber ada di `counter-service/` (FastAPI + Postgres).
-- Endpoint utama: `POST /hit` dan `GET /count/{namespace}`.
-- Butuh `DATABASE_URL` Postgres; lihat `counter-service/.env.example`.
+- Kode sumber ada di `counter-service/` (FastAPI + Postgres). Endpoint penting:
+  - `POST /hit` — body `{"namespace":"asiafap.com","visitor_id":"<uuid>"}`; balikan `value`, `today`, `unique_today`, dan flag `throttled`.
+  - `GET /count/{namespace}` / `/stats/{namespace}` — baca angka tanpa menambah counter.
+- Backend ngasih throttling 10 detik per `visitor_id` + hitungan unique harian. Front-end generate `visitor_id` di localStorage.
+- Butuh `DATABASE_URL` Postgres; contoh ada di `counter-service/.env.example`.
 - Jalankan lokal: `uvicorn app.main:app --reload --port 8787`.
-- Setelah deploy di server sendiri, update script di `index.html` supaya memanggil domain API milikmu alih-alih CountAPI.
+- Setelah deploy di server sendiri, set `window.COUNTER_API_ENDPOINT` kalau mau override domain default di `index.html`.
