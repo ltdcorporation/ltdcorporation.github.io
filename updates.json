@@ -3,7 +3,8 @@
   "status": "Status Channel : Active",
   "latestLink": "https://t.me/ltddev",
   "mirrors": [
-    "https://t.me/jpncoded"
+    "https://t.me/jpncoded",
+    "https://t.me/ltdbasecamp"
   ],
   "bots": [
     "https://t.me/ltdstorev4bot",
@@ -45,6 +46,10 @@
     ]
   },
   "updates": [
+    {
+      "ts": "2025-12-31T12:38:04+07:00",
+      "text": "Link cadangan ditambah."
+    },
     {
       "ts": "2025-12-31T12:37:26+07:00",
       "text": "Mirror dihapus: https://t.me/lusttodeath"
