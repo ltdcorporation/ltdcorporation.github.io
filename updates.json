@@ -3,7 +3,6 @@
   "status": "Status Channel : Active",
   "latestLink": "https://t.me/ltddev",
   "mirrors": [
-    "https://t.me/lusttodeath",
     "https://t.me/jpncoded"
   ],
   "bots": [
@@ -46,6 +45,10 @@
     ]
   },
   "updates": [
+    {
+      "ts": "2025-12-31T12:37:26+07:00",
+      "text": "Mirror dihapus: https://t.me/lusttodeath"
+    },
     {
       "ts": "2025-11-09T04:12:21+07:00",
       "text": "Mirror dihapus: https://t.me/bawcollection"
