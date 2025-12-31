@@ -1,7 +1,7 @@
 {
   "brand": "Lust to Death",
   "status": "Status Channel : Active",
-  "latestLink": "https://t.me/ltddev",
+  "latestLink": "https://t.me/ltdbasecamp",
   "mirrors": [
     "https://t.me/jpncoded",
     "https://t.me/ltdbasecamp"
@@ -46,6 +46,10 @@
     ]
   },
   "updates": [
+    {
+      "ts": "2025-12-31T12:40:28+07:00",
+      "text": "Link channel utama diupdate. Tombol hijau udah ganti."
+    },
     {
       "ts": "2025-12-31T12:38:04+07:00",
       "text": "Link cadangan ditambah."
